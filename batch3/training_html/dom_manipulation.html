@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- CHANGE ELEMENT CONTENT -->
+    <div>
+        <h3 id="title">Hello World!</h3>
+        <button id="button1" onclick="changeContent()">Change Content</button>
+
+    </div>
+
+    <br><br><br>
+
+    <!-- CHANGE ELEMENT STYLE -->
+     <div>
+        <p id="line1">
+            this is a line.
+        </p>
+        <button onclick = "changeStyle()">
+            Change Style
+        </button>
+     </div>
+
+     <!-- APPEND ELEMENTS -->
+
+     <div>
+        <div id = "container1">
+            <p>This is first line.</p>
+        </div>
+            <button oneclick = "addElement()" >
+                Add Element
+            </button>
+     </div>
+</body>
+</html>
+ 
+<script>
+    // I can use this hard code
+    // document.getElementById("button1").addEventListener("click", function(){
+    //     document.getElementById("title").textContent = "Hello Javascript";
+    // });
+
+    // or use this more cleaned 
+    function changeContent(){
+        document.getElementById("title").innerHTML = "Hello Javascript";
+    }
+    
+    function changeStyle(){
+        document.getElementById("line1").style.color = 'red';
+        document.getElementById("line1").style.fontSize = '20px';
+    }
+
+    function addElement(){
+        var newElement = document.createElement("p");
+        newelement.innerHTML = "This is second line."
+    }
+
+
+
+</script>
+
+<!-- What I learned
+    1. DOM function Name(){
+    whats inside then used;
+    }
+    2. documents
+        a. documents.getElementById --
+            a.1 .addEventListener("click, function") -- pede lng i shortcuts heheh
+            a.1 .getElementByID("title").textContent = "Hello Java" -- diri need pa ug practice
+        b. documents.innerHTML -- to change inside you html output 
+
+-->
