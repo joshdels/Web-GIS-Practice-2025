@@ -131,14 +131,61 @@
             var have_any_pet = true
 
             if (have_any_pet){
-                console.log(" I have a pet")
+                console.log(" I have a pet");
             } else if (True) {
-                console.log("apple")
+                console.log("apple");
             }
             else {
-                console.log(" I don't have a ny pet")
+                console.log(" I don't have a ny pet");
             }
             
+            //SWITCH
+
+                var day = 1;
+                var day_name;
+
+                switch(day) {
+                    case 1:
+                        day_name = 'Monday';
+                        break;
+                    case 2:
+                        day_name = 'Tuesday';
+                        break;
+                    case 3:
+                        day_name = 'Wednesday';
+                        break;
+                    case 4:
+                        day_name = 'Thursday';
+                        break;
+                    case 5:
+                         day_name = 'Friday';
+                         break;
+                    case 6:
+                        day_name = 'Saturday';
+                        break;                
+                    case 7:
+                        day_name = 'Sunday';
+                        break;                   
+                    default:
+                        // satements_def
+                        day_name = 'Error';
+                        break;
+                }
+
+                console.log(day_name);
+
+            //FUNCTIONS
+                function greet(name, age) {
+                    return "Hello " + name + ". You are: " +age+ " years old." 
+                }
+                
+                console.log(greet('Joshua', 26));
+
+                function multiply(a,b) {
+                    return a*b;
+                }
+                
+                console.log(multiply(5.6,8.9))
 
     </script>
 
