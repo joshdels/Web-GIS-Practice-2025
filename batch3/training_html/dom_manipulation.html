@@ -6,7 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-    <!-- CHANGE ELEMENT CONTENT -->
+    CHANGE ELEMENT CONTENT
     <div>
         <h3 id="title">Hello World!</h3>
         <button id="button1" onclick="changeContent()">Change Content</button>
@@ -15,7 +15,7 @@
 
     <br><br><br>
 
-    <!-- CHANGE ELEMENT STYLE -->
+    CHANGE ELEMENT STYLE
      <div>
         <p id="line1">
             this is a line.
@@ -25,16 +25,47 @@
         </button>
      </div>
 
-     <!-- APPEND ELEMENTS -->
+     APPEND ELEMENTS
 
      <div>
         <div id = "container1">
-            <p>This is first line.</p>
+            <p>
+                This is first line.
+            </p>
         </div>
-            <button oneclick = "addElement()" >
+            <button onclick = "addElement()">
                 Add Element
             </button>
      </div>
+
+     <br><br><br>
+
+     <div>
+        <p id="removeMe">
+            This line will be removed
+            <button onClick="removeElement()">
+                Remove Element
+            </button>
+        </p>
+     </div>
+
+     MODIFYING ATTRIBUTES
+      <div>
+        <img id="myImage" src  ="images/New_Propose.png" width="400" height="300">
+        <button onClick="changeImage()">
+            Change image
+        </button>
+      </div>
+
+      <br><br><br>
+
+      HANDLING EVENTS
+      <div>
+        <button id="button_alert">
+            Alert
+        </button>
+      </div>
+
 </body>
 </html>
  
@@ -45,6 +76,7 @@
     // });
 
     // or use this more cleaned 
+
     function changeContent(){
         document.getElementById("title").innerHTML = "Hello Javascript";
     }
@@ -56,8 +88,24 @@
 
     function addElement(){
         var newElement = document.createElement("p");
-        newelement.innerHTML = "This is second line."
+        newElement.innerHTML = "This is second line.";
+        document.getElementById("container1").appendChild(newElement);
     }
+
+    function removeElement(){
+        var element = document.getElementById("removeMe");
+        element.parentNode.removeChild(element);
+    }
+
+    function changeImage(){
+        var image = document.getElementById("myImage");
+        image.src = "images/image2.jpg"
+    }
+
+    document.getElementById("button_alert").addEventListener("click", function(){
+        alert("The button has been pressed")
+    })
+    
 
 
 
