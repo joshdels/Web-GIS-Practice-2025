@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- J Query -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+</head>
+<body>
+    
+    <div>
+        <label>
+            Input Numbers (separte by commas):
+        </label>
+        <input type="text" id = "numbers">
+        <button id="button1">
+            Calculate Average
+        </button>
+        <br><br>
+        <label>Average: 
+
+        </label>
+        <input type = "text" id="average" disabled >
+
+    </div>
+
+    <script>
+
+        $("#button1").click(function(){
+            var inputs = $('#numbers').val();
+            console.log(inputs);
+
+            var inputs_split = inputs.split(",");
+            console.log(inputs_split);
+            
+            var numbers_array = [];
+
+            for (var i=0; i<inputs_split.length; i++) {
+                var number = inputs_split[i].trim();
+                numbers_array.push(number);
+            }
+
+            console.log(numbers_array);
+
+            var valid_numbers = [];
+            var invalid_count = 0;
+            var sum = 0;
+
+            //Filtering invalid numbers
+            for (var j=0; j<numbers_array.length; j++){
+                if (isNaN(numbers_array[j]) || numbers_array[j] == ""){
+                    invalid_count = invalid_count + 1;
+                    alert("Invalid Number: " + numbers_array[j]);
+                } else {
+                    var num = parseFloat(numbers_array[j]);
+                    sum = sum + num;
+                    valid_numbers.push(numbers_array[j]);
+                }
+            }
+
+            //Calculate average
+            if (invalid_count==0 && valid_numbers.length > 0){
+                var average = sum/valid_numbers.length;
+                console.log(average);
+                $("#average").val(average);
+            }
+
+        });
+
+    </script>
+</body>
+</html>
+
+<!-- 
+
+J query simplify lifes  
+$("#button1").click(function(){
+            
+
+The for lops like C++
+for (var i=0; i<conditions; i++)
+})
+
+var i=0 initialize the looop
+i<conditions -- is for the conditions
+i++ is for the increament shorthand for i = i + 1
+
+and .push kay append sa python, dyemmm!
+
+|| is also or statement
+$$ is and statement
+
+-->
