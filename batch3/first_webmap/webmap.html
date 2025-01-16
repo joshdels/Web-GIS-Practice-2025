@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First Webmap</title>
+
+    <!-- Careful sa CSS, medyo dehado ako dito -->
+
+    <link rel="stylesheet" href="styles.css">
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.0/leaflet.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="source/jquery-ui.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.0/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.0/leaflet-src.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"></script>
+    <script src="source/jquery-ui.min.js"></script>
+
+</head>
+<body>
+    
+    <div id="sidebar" class="col-md-3">
+
+    </div>
+
+    <div id="mapdiv" class="col-md-12">
+
+    </div>
+
+
+    <script>
+         // initialize the map on the "map" div with a given center and zoom
+        var mymap = L.map("mapdiv", {
+            center: [7.44689, 125.8076],
+            zoom: 13
+        });
+        //Basemap
+        var openStreetMap = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?',{maxZoom:33}).addTo(mymap);
+
+        
+    </script>
+</body>
+</html>
