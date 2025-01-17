@@ -33,12 +33,27 @@
 
     <script>
          // initialize the map on the "map" div with a given center and zoom
+         // control you map "mymap"
         var mymap = L.map("mapdiv", {
             center: [7.44689, 125.8076],
-            zoom: 13
+            zoom: 13,
+            attributionControl: false,
+            zoomControl: false,
         });
         //Basemap
         var openStreetMap = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?',{maxZoom:33}).addTo(mymap);
+
+        var OpenStreetMap_HOT = L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+            maxZoom: 23,
+           });
+
+        var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 23,
+        });
+
+        //OpenStreetMap_HOT.addTo(mymap);
+        
+        Esri_WorldImagery.addTo(mymap);
 
         
     </script>
