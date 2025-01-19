@@ -9,26 +9,42 @@
 
     <link rel="stylesheet" href="styles.css">
 
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.0/leaflet.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="source/jquery-ui.min.css">
+    <link rel="stylesheet" href="Plugins/sidebar/L.Control.Sidebar.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="https://ppete2.github.io/Leaflet.PolylineMeasure/Leaflet.PolylineMeasure.css" />
+    <link rel="stylesheet" href="Plugins/mouse_position/L.Control.MousePosition.css">
+    <link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css" />
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.0/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.0/leaflet-src.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"></script>
     <script src="source/jquery-ui.min.js"></script>
+    <script src="Plugins/sidebar/L.Control.Sidebar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
+    <script src="https://ppete2.github.io/Leaflet.PolylineMeasure/Leaflet.PolylineMeasure.js"></script>
+    <script src="Plugins/mouse_position/L.Control.MousePosition.js"></script>
+    <script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.js"></script>
+
+
 
 </head>
 <body>
+    <div class="container-fluid">  
+        <div class="row">
+            <div id="sidebar" class="col-md-3">
+
+            </div>
+            <div id="mapdiv" class="col-md-12">
+
+            </div>
+        </div>
+</div>
+  
     
-    <div id="sidebar" class="col-md-3">
-
-    </div>
-
-    <div id="mapdiv" class="col-md-12">
-
-    </div>
 
 
     <script>
@@ -53,7 +69,45 @@
 
         //OpenStreetMap_HOT.addTo(mymap);
         
-        Esri_WorldImagery.addTo(mymap);
+        OpenStreetMap_HOT.addTo(mymap);
+
+        //Sidebar
+        var sidebar = L.control.sidebar('sidebar', {
+            position: 'left'
+        });
+        
+        mymap.addControl(sidebar);
+
+        //sidebar.show();
+
+        //Easy button
+        var helloPopup = L.popup().setContent('Hello World!');
+
+        L.easyButton('glyphicon glyphicon-transfer', function(){
+            sidebar.toggle();
+        }).addTo(mymap);
+
+        //Scale
+        L.control.scale({position: 'bottomleft' , maxWidth: '200', imperial: false }).addTo(mymap);
+
+        //MEASURE
+        L.control.polylineMeasure({position:"topright"}).addTo(mymap);
+
+        //MOUSE POSITION
+        L.control.mousePosition({position: 'bottomright'}).addTo(mymap);
+
+        //DRAW CONTROL OR GEOMAN  
+        mymap.pm.addControls({  
+            position: 'topleft',  
+            drawCircleMarker: false,
+            rotateMode: false,
+        }); 
+
+        mymap.on("pm:create", function(e){
+            console.log(e)
+        })
+
+    
 
         
     </script>
