@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>First Webmap</title>
+    <title>Joshua First Webmap</title>
 
     <!-- Careful sa CSS, medyo dehado ako dito -->
 
@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="https://ppete2.github.io/Leaflet.PolylineMeasure/Leaflet.PolylineMeasure.css" />
     <link rel="stylesheet" href="Plugins/mouse_position/L.Control.MousePosition.css">
     <link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css" />
+    <link rel="stylesheet" href="Plugins/mini_map/Control.MiniMap.min.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.0/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.0/leaflet-src.js"></script>
@@ -28,26 +29,26 @@
     <script src="https://ppete2.github.io/Leaflet.PolylineMeasure/Leaflet.PolylineMeasure.js"></script>
     <script src="Plugins/mouse_position/L.Control.MousePosition.js"></script>
     <script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.js"></script>
+    <script src="Plugins/mini_map/Control.MiniMap.min.js"></script>
 
 
 
 </head>
 <body>
-    <div class="container-fluid">  
-        <div class="row">
-            <div id="sidebar" class="col-md-3">
+    
+    <div id="sidebar" class="col-md-3"></div>
+    <div id="mapdiv" class="col-md-12"></div>
 
-            </div>
-            <div id="mapdiv" class="col-md-12">
 
-            </div>
-        </div>
-</div>
   
     
-
-
     <script>
+
+        var mymap;
+        var baseLayers
+        var overlays
+        
+
          // initialize the map on the "map" div with a given center and zoom
          // control you map "mymap"
         var mymap = L.map("mapdiv", {
@@ -66,6 +67,16 @@
         var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
         maxZoom: 23,
         });
+
+        var OpenTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+            maxZoom: 23,
+        });
+
+        var openStreetMap_minimap = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?',{
+            maxZoom:33
+        });
+        
+
 
         //OpenStreetMap_HOT.addTo(mymap);
         
@@ -90,6 +101,9 @@
         //Scale
         L.control.scale({position: 'bottomleft' , maxWidth: '200', imperial: false }).addTo(mymap);
 
+        //ZOOM CONTROL
+        L.control.zoom({position:"topright"}).addTo(mymap)
+
         //MEASURE
         L.control.polylineMeasure({position:"topright"}).addTo(mymap);
 
@@ -107,6 +121,27 @@
             console.log(e)
         })
 
+        //MINI MAP
+        var miniMap = new L.Control.MiniMap(openStreetMap_minimap, {
+            position:"bottomright",
+            height: 200,
+            width: 200,
+        }).addTo(mymap);
+
+
+        //LAYER CONTROL
+        var baseLayers = {
+            "Open Street Map Hot": OpenStreetMap_HOT,
+            "Open Street Map": openStreetMap,
+            "Open TopoMap": OpenTopoMap,
+            "Esri World Imagery": Esri_WorldImagery,
+        };
+
+        var control_layers = L.control.layers(baseLayers, overlays).addTo(mymap);
+
+     
+
+        
     
 
         
