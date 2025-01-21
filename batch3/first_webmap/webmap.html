@@ -30,7 +30,7 @@
     <script src="Plugins/mouse_position/L.Control.MousePosition.js"></script>
     <script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.js"></script>
     <script src="Plugins/mini_map/Control.MiniMap.min.js"></script>
-
+    <script src="Plugins/ajax/leaflet.ajax.js"></script>
 
 
 </head>
@@ -140,6 +140,14 @@
         var control_layers = L.control.layers(baseLayers, overlays).addTo(mymap);
 
      
+        //DATA LOADING OPERATIONS
+
+        //VALVE
+        var valves = L.geoJSON.ajax('data/valves_105.geojson', {pointToLayer: style_valves}).addTo(mymap);
+
+        function style_valves(json, latlng) {
+            return L.marker(latlng);
+        }
 
         
     
