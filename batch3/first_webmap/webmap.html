@@ -145,9 +145,140 @@
         //VALVE
         var valves = L.geoJSON.ajax('data/valves_105.geojson', {pointToLayer: style_valves}).addTo(mymap);
 
+        //automatic adjuster to maps
+        valves.on('data:loaded', function(){
+            mymap.fitBounds(valves.getBounds());
+        })
+
         function style_valves(json, latlng) {
-            return L.marker(latlng);
+            var att = json.properties;
+            var color;
+            var fill_color;
+            var radius = 5;
+            var fillOpacity = 1;
+
+            //color catergorize scenario
+            switch(att.type) {
+                case 'Air Release Valve':
+                    color = '#e74c3c';
+                    fill_color = '#e74c3c';
+                    break;
+                case 'Gate Valve':
+                    color = '#a569bd';
+                    fill_color = '#a569bd';
+                    break;
+                case 'Washout Valve':
+                    color = '#5dade2';
+                    fill_color = '#5dade2';
+                    break;
+                default:
+                    color = '#808b96';
+                    fill_color = '#808b96';
+                    break;
+            }
+
+            var style = {radius: radius, color:color, fillColor:fill_color, fillOpacity:fillOpacity}
+
+            //hover over objects
+            return L.circleMarker(latlng, style).bindTooltip("Valve ID: " + att.valve_id+"<br>Valve Type: "+att.type+"<br>Diameter (mm): "+att.diameter+"<br>Location: "+att.location);
+          
         }
+
+        //Overlay Valves
+        control_layers.addOverlay(valves, "Valves")
+
+
+        //PIPELINES
+        var pipelines = L.geoJSON.ajax('data/pipelines_105.geojson', {style: style_pipelines, onEachFeature: process_pipelines}).addTo(mymap);
+
+        function style_pipelines(json) {
+            var att = json.properties;
+
+            switch(att.category) {
+                case 'Distribution Pipeline':
+                    color = '#27ae60';
+                    fill_color = '#27ae60';
+                    break;
+                case 'Reticulation Pipeline':
+                    color = '#7b241c';
+                    fill_color = '#7b241c';
+                    break;
+                case 'Transmission Pipeline':
+                    color = '#f4d03f';
+                    fill_color = '#f4d03f';
+                    break;
+                default:
+                    color = '#808b96';
+                    fill_color = '#808b96';
+                    break;
+            }
+            return {color:color};
+        }
+
+        function process_pipelines(json) {
+            var att = json.properties;
+
+            lyr.bindTooltip("Pipe ID: "+att.pipe_id+"<br>Diameter: "+att.diameter+"<br>Location: "+att.location+"<br>Category: "+att.category+"<br>Length: "+att.length);
+        }
+
+        control_layers.addOverlay(pipelines, "Pipelines");
+
+         //BUILDINGS
+         var buildings = L.geoJSON.ajax('data/BLD_105.geojson', {style: style_BLD, onEachFeature: process_BLD}).addTo(mymap);
+
+         function style_BLD(json, lyr){
+            var att = json.properties;
+            var storey = att.storey;
+            var color;
+            var fill_color;
+            var fill_opacity;
+
+            switch(att.category) {
+                case 'Building':
+                    if (storey>=10) {
+                        color = '#922b21';
+                        fill_color = '#922b21';
+                    } else if (storey >= 8 ){
+                        color = '#c0392b';
+                        fill_color = '#c0392b';
+                    } else if (storey >= 5) {
+                        color = '#d98880 ';
+                        fill_color = '#d98880';
+                    } else if (storey >= 3) {
+                        color = '#e6b0aa';
+                        fill_color = '#e6b0aa';
+                    } else {
+                        color = '#f9ebea';
+                        fill_color = '#f9ebea';
+                    }
+                    break;
+
+                case 'Tin Shed':
+                    color = '#edbb99';
+                    fill_color = '#edbb99';
+                    fill_opacity = 0.85;
+                    break;
+                case 'Open Plot':
+                    color = '#d5f5e3 ';
+                    fill_color = '#d5f5e3 ';
+                    break;
+                default:
+                    color = 'black';
+                    fill_color = 'black';
+                    break;
+            }
+
+            return {color:color, fillColor:fill_color, fillOpacity:fill_opacity};
+
+         }
+
+         function process_BLD(json, lyr) {
+            var att = json.properties;
+
+            lyr. bindPopup("Catergory: "+catergory+"<br>Storey: "+att.storey+"<br>Location :"+att.location+"<br>Account Number: " + att.account_no);
+         }
+
+         control_layers.addOverlay(buildings, "Buildings");
 
         
     
