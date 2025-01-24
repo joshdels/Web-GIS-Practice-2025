@@ -14,11 +14,12 @@
     <link rel="stylesheet" href="source/jquery-ui.min.css">
     <link rel="stylesheet" href="Plugins/sidebar/L.Control.Sidebar.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" href="https://ppete2.github.io/Leaflet.PolylineMeasure/Leaflet.PolylineMeasure.css" />
     <link rel="stylesheet" href="Plugins/mouse_position/L.Control.MousePosition.css">
     <link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css" />
     <link rel="stylesheet" href="Plugins/mini_map/Control.MiniMap.min.css">
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.0/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.0/leaflet-src.js"></script>
@@ -66,7 +67,6 @@
             <div class="form-group">
                 <div class="col-xs-6">
                     <input type="text" id="valve_id" class="form-control" placeholder="Valve ID">
-                    
                 </div>
 
                 <div class="col-xs-6">
@@ -96,7 +96,7 @@
                 <p class="text-center bold">
                     Pipeline Information
                 </p>
-            <div class="col-xs-12 errorMsg" id="valve_error"></div>
+            <div class="col-xs-12 errorMsg" id="pipeline_error"></div>
 
             <div class="col-xs-12" stlye="height: 10px;"></div>
 
@@ -133,7 +133,7 @@
                 <p class="text-center bold">
                     Building Information
                 </p>
-            <div class="col-xs-12 errorMsg" id="valve_error"></div>
+            <div class="col-xs-12 errorMsg" id="building_error"></div>
 
             <div class="col-xs-12" stlye="height: 10px;"></div>
 
@@ -158,21 +158,20 @@
             </div>
             
         </div>
-
+    </div>
         
     </div>
 
     <div id="mapdiv" class="col-md-12"></div>
 
-
-  
-    
     <script>
 
         var mymap;
         var baseLayers;
         var overlays;
         var lyrSearch;
+
+        var valves_array = [];
         
 
          // initialize the map on the "map" div with a given center and zoom
@@ -269,11 +268,25 @@
         //DATA LOADING OPERATIONS
 
         //VALVE
-        var valves = L.geoJSON.ajax('data/valves_105.geojson', {pointToLayer: style_valves}).addTo(mymap);
+        var valves = L.geoJSON.ajax('data/valves_105.geojson', {pointToLayer: style_valves}).
+            addTo(mymap);
+
+        console.log(valves_array);
 
         //automatic adjuster to maps
         valves.on('data:loaded', function(){
             mymap.fitBounds(valves.getBounds());
+            
+           $("#valve_id").autocomplete({
+            source: valves_array,
+            open: function(event, ui) {
+                // for debuging UI and Autocomplete problems
+                console.log("A", valves_array);
+                console.log("Selected item:", ui.item.value);
+            }
+
+           });  
+        
         })
 
         function style_valves(json, latlng) {
@@ -282,6 +295,9 @@
             var fill_color;
             var radius = 5;
             var fillOpacity = 1;
+            
+            //console.log(att.valve_id);
+            valves_array.push(att.valve_id); // got no idea sa .push() haha
 
             //color catergorize scenario
             switch(att.type) {
@@ -317,8 +333,8 @@
         $("#findValve").click(function(){
             var valve_id = $("#valve_id").val();
             
-           var lyr =  returnLayerByAttribute(valves, "valve_id", valve_id);
-           console.log(lyr);
+            var lyr =  returnLayerByAttribute(valves, "valve_id", valve_id);
+            console.log(lyr);
 
            if (lyr) {
                 if (lyrSearch) {
@@ -341,7 +357,7 @@
            } else {
                 $("#valve_error").html("valve not found");
            }
-        })
+        });
 
 
         //PIPELINES
@@ -466,3 +482,6 @@
     </script>
 </body>
 </html>
+
+
+

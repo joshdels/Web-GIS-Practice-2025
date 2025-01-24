@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery UI Autocomplete Test</title>
+
+    <!-- jQuery UI Default CSS -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+</head>
+<body>
+    <div style="padding: 20px;">
+        <label for="valve_id">Search Valves:</label>
+        <input type="text" id="valve_id" placeholder="Type a valve name" style="width: 300px; padding: 5px;">
+    </div>
+
+    <!-- jQuery and jQuery UI -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+    <script>
+        // Test data for valves
+        const valveNames = [
+            "Air Release Valve",
+            "Gate Valve",
+            "Washout Valve",
+            "Butterfly Valve",
+            "Pressure Reducing Valve",
+            "Non-return Valve"
+        ];
+
+        $(document).ready(function () {
+            // Initialize autocomplete
+            $("#valve_id").autocomplete({
+                source: valveNames, // Use the test array
+                minLength: 1 // Start showing suggestions after typing 1 character
+            });
+        });
+    </script>
+</body>
+</html>
