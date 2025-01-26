@@ -51,6 +51,9 @@
 <body>
     
     <div id="sidebar" class="col-md-3">
+
+        <!-- Valves -->
+
 		<div id="divValve" class="col-xs-12">
 
 			<div class="col-xs-12" style="height: 10px;"></div>
@@ -111,6 +114,8 @@
 
 		<div class="col-xs-12" style="height: 50px;"></div>
 
+        <!-- Buildings -->
+
 		<div id="divBuilding" class="col-xs-12">
 
 			<div class="col-xs-12" style="height: 10px;"></div>
@@ -150,6 +155,8 @@
         var lyrSearch;
 
         var valves_array = [];
+        var pipelines_array = [];
+        var buildings_array = [];
         
 
          // initialize the map on the "map" div with a given center and zoom
@@ -249,8 +256,6 @@
         var valves = L.geoJSON.ajax('data/valves_105.geojson', {pointToLayer: style_valves}).
             addTo(mymap);
 
-
-
         //automatic adjuster to maps
         valves.on('data:loaded', function(){
             mymap.fitBounds(valves.getBounds());
@@ -333,8 +338,14 @@
 
 
         //PIPELINES
-        var pipelines = L.geoJSON.ajax('data/pipelines_105.geojson', {style: style_pipelines, onEachFeature: process_pipelines}).addTo(mymap);
+        var pipelines = L.geoJSON.ajax('data/pipelines_105.geojson', {style: style_pipelines, 
+            onEachFeature: process_pipelines}).addTo(mymap);
 
+       
+        $("#pipeline_id").autocomplete({
+            source: pipelines_array,
+        });
+    
         function style_pipelines(json) {
             var att = json.properties;
 
@@ -362,14 +373,49 @@
         function process_pipelines(json, lyr) {
             var att = json.properties;
 
+            pipelines_array.push(att.pipe_id);
+
             //Hover to show deails
             lyr.bindTooltip("Pipe ID: "+att.pipe_id+"<br>Diameter: "+att.diameter+"<br>Location: "+att.location+"<br>Category: "+att.category+"<br>Length: "+att.length);
         }
 
         control_layers.addOverlay(pipelines, "Pipelines");
 
+        $("#findPipeline").click(function(){
+            var pipeline_id = $("#pipeline_id").val();
+            
+            var lyr =  returnLayerByAttribute(pipelines, "pipe_id", pipeline_id);
+
+
+           if (lyr) {
+                var att = lyr.feature.properties;
+
+                if (lyrSearch) {
+                    lyrSearch.remove();
+                }
+
+                lyrSearch = L.geoJSON(lyr.toGeoJSON(), {style:{color:'red', weight:10,
+                    opacity:0.5}}).addTo(mymap);
+
+                mymap.fitBounds(lyr.getBounds());
+                valves.bringToFront();
+
+                $("#pipeline_information").html("Category: "+att.category+"<br>DMA ID: "+att.
+                    dma_id+"<br>Material: "+att.material+"<br>Length: "+att.length+"<br>Location: "+
+                    att.location);
+
+           } else {
+                $("#pipeline_error").html("Pipeline not found");
+           }
+        });
+
+
          //BUILDINGS
          var buildings = L.geoJSON.ajax('data/buildings_105.geojson', {style:style_buildings, onEachFeature:process_buildings}).addTo(mymap);
+
+         $("#building_id").autocomplete({
+            source: buildings_array,
+         });
 
          function style_buildings(json){
             var att = json.properties;
@@ -420,11 +466,42 @@
          function process_buildings(json, lyr) {
             var att = json.properties;
 
+            buildings_array.push(att.account_no);
+
+            building_array.push(att.account_no);
+
             //When Click details show up
             lyr.bindPopup("Catergory: "+att.category+"<br>Storey: "+att.storey+"<br>Location :"+att.location+"<br>Account Number: " + att.account_no);
          }
 
          control_layers.addOverlay(buildings, "Buildings");
+
+         $("#findBuilding").click(function(){
+            var building_id = $("#building_id").val();
+            
+            var lyr =  returnLayerByAttribute(buildings, "account_no", building_id);
+
+
+           if (lyr) {
+                var att = lyr.feature.properties;
+
+                if (lyrSearch) {
+                    lyrSearch.remove();
+                }
+
+                lyrSearch = L.geoJSON(lyr.toGeoJSON(), {style:{color:'red', weight:10,
+                    opacity:1, fillOpacity:0}}).addTo(mymap);
+
+                mymap.fitBounds(lyr.getBounds());
+
+                $("#building_information").html("Category: "+att.category+"<br>Storey: "+att.storey+
+                    "<br>Population: "+att.population+"<br>Location: "+att.location+"<br>DMA ID: "+
+                    att.dma_id);
+
+           } else {
+                $("#building_error").html("Building not found");
+           }
+        });
 
          //GENERAL FUNCTIONS
          function returnLayerByAttribute(layer,attribute_name, attribute_value) {
