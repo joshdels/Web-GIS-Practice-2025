@@ -49,148 +49,154 @@
 
 </head>
 <body>
-    
-    <!-- <div id="sidebar" class="col-md-3"> --> 
-    <div id="sidebar" class="sidebar collapsed">
 
+        
     
+    <div id="sidebar" class="sidebar collapsed">
         <!-- Nav tabs -->
         <div class="sidebar-tabs">
             <ul role="tablist">
-                <li><a href="#home" role="tab"><i class="fa fa-bars"></i></a></li>
-                <li><a href="#profile" role="tab"><i class="fa fa-user"></i></a></li>
-                <li class="disabled"><a href="#messages" role="tab"><i class="fa fa-envelope"></i></a></li>
-                <li><a href="https://github.com/Turbo87/sidebar-v2" role="tab" target="_blank"><i class="fa fa-github"></i></a></li>
-            </ul>
-
-            <ul role="tablist">
-                <li><a href="#settings" role="tab"><i class="fa fa-gear"></i></a></li>
+                <li><a href="#home" role="tab"><i class="fa fa-home"></i></a></li>
+                <li><a href="#valve" role="tab"><i class="fa fa-puzzle-piece"></i></a></li>
+                <li><a href="#pipeline" role="tab"><i class="fa fa-sliders"></i></a></li>
+                <li><a href="#building" role="tab"><i class="fa fa-building"></i></a></li>
             </ul>
         </div>
-
+        
         <!-- Tab panes -->
         <div class="sidebar-content">
+
+
             <div class="sidebar-pane" id="home">
                 <h1 class="sidebar-header">
-                    sidebar-v2
+                    Home
                     <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
                 </h1>
 
-                <p>A responsive sidebar for mapping libraries like <a href="http://leafletjs.com/">Leaflet</a> or <a href="http://openlayers.org/">OpenLayers</a>.</p>
+           
+			
+		
 
-                <p class="lorem">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
 
-                <p class="lorem">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-
-                <p class="lorem">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-
-                <p class="lorem">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
             </div>
 
-            <div class="sidebar-pane" id="profile">
-                <h1 class="sidebar-header">Profile<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+        <div class="sidebar-pane" id="valve">
+            <h1 class="sidebar-header">
+                Valves
+                <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+            </h1>
+
+            <div id="divValve" class="col-xs-12">
+
+                <div class="col-xs-12" style="height: 10px;"></div>
+
+                <div class="col-xs-12">
+                    <p class="text-center bold">Valve Information</p>
+                </div>
+                <div class="col-xs-12 errorMsg" id="valve_error"></div>
+
+                <div class="col-xs-12" style="height: 10px;"></div>
+
+                <div class="form-group">
+                    <div class="col-xs-6">
+                        <input type="text" id="valve_id" class="form-control" 
+                        placeholder="Valve ID">
+                    </div>
+                    <div class="col-xs-6">
+                        <button id="findValve" class="btn btn-primary btn-block">
+                        Find Valve</button>
+                    </div>
+                </div>
+
+                <div class="col-xs-12" style="height: 15px;"></div>
+
+                <div class="col-xs-12" id="valve_information">
+                    
+                </div>
+
             </div>
 
-            <div class="sidebar-pane" id="messages">
-                <h1 class="sidebar-header">Messages<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
-            </div>
 
-            <div class="sidebar-pane" id="settings">
-                <h1 class="sidebar-header">Settings<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
-            </div>
         </div>
+    
+            <div class="sidebar-pane" id="pipeline">
+                <h1 class="sidebar-header">
+                    Pipelines
+                    <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                </h1>
+
+                <div id="divPipeline" class="col-xs-12">
+
+                    <div class="col-xs-12" style="height: 10px;"></div>
+
+                    <div class="col-xs-12">
+                        <p class="text-center bold">Pipeline Information</p>
+                    </div>
+                    <div class="col-xs-12 errorMsg" id="pipeline_error"></div>
+
+                    <div class="col-xs-12" style="height: 10px;"></div>
+
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <input type="text" id="pipeline_id" class="form-control" placeholder="Pipeline ID">
+                        </div>
+                        <div class="col-xs-6">
+                            <button id="findPipeline" class="btn btn-primary btn-block">Find Pipeline</button>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12" style="height: 15px;"></div>
+
+                    <div class="col-xs-12" id="pipeline_information">
+                        
+                    </div>
+
+                </div>
+
+             
+
+            </div>
+
+
+            <div class="sidebar-pane" id="building">
+                <h1 class="sidebar-header">
+                    Buildings
+                    <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                </h1>
+
+                <div id="divBuilding" class="col-xs-12">
+
+                    <div class="col-xs-12" style="height: 10px;"></div>
+
+                    <div class="col-xs-12">
+                        <p class="text-center bold">Building Information</p>
+                    </div>
+                    <div class="col-xs-12 errorMsg" id="building_error"></div>
+
+                    <div class="col-xs-12" style="height: 10px;"></div>
+
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <input type="text" id="building_id" class="form-control" placeholder="Building Account Number">
+                        </div>
+                        <div class="col-xs-6">
+                            <button id="findBuilding" class="btn btn-primary btn-block">Find Building</button>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12" style="height: 15px;"></div>
+
+                    <div class="col-xs-12" id="building_information">
+                    
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+            
     </div>
-        <!-- Valves -->
 
-		<div id="divValve" class="col-xs-12">
-
-			<div class="col-xs-12" style="height: 10px;"></div>
-
-			<div class="col-xs-12">
-				<p class="text-center bold">Valve Information</p>
-			</div>
-			<div class="col-xs-12 errorMsg" id="valve_error"></div>
-
-			<div class="col-xs-12" style="height: 10px;"></div>
-
-			<div class="form-group">
-				<div class="col-xs-6">
-					<input type="text" id="valve_id" class="form-control" placeholder="Valve ID">
-				</div>
-				<div class="col-xs-6">
-					<button id="findValve" class="btn btn-primary btn-block">Find Valve</button>
-				</div>
-			</div>
-
-			<div class="col-xs-12" style="height: 15px;"></div>
-
-			<div class="col-xs-12" id="valve_information">
-				
-			</div>
-			
-		</div>
-
-		<div class="col-xs-12" style="height: 50px;"></div>
-
-		<div id="divPipeline" class="col-xs-12">
-
-			<div class="col-xs-12" style="height: 10px;"></div>
-
-			<div class="col-xs-12">
-				<p class="text-center bold">Pipeline Information</p>
-			</div>
-			<div class="col-xs-12 errorMsg" id="pipeline_error"></div>
-
-			<div class="col-xs-12" style="height: 10px;"></div>
-
-			<div class="form-group">
-				<div class="col-xs-6">
-					<input type="text" id="pipeline_id" class="form-control" placeholder="Pipeline ID">
-				</div>
-				<div class="col-xs-6">
-					<button id="findPipeline" class="btn btn-primary btn-block">Find Pipeline</button>
-				</div>
-			</div>
-
-			<div class="col-xs-12" style="height: 15px;"></div>
-
-			<div class="col-xs-12" id="pipeline_information">
-				
-			</div>
-			
-		</div>
-
-		<div class="col-xs-12" style="height: 50px;"></div>
-
-        <!-- Buildings -->
-
-		<div id="divBuilding" class="col-xs-12">
-
-			<div class="col-xs-12" style="height: 10px;"></div>
-
-			<div class="col-xs-12">
-				<p class="text-center bold">Building Information</p>
-			</div>
-			<div class="col-xs-12 errorMsg" id="building_error"></div>
-
-			<div class="col-xs-12" style="height: 10px;"></div>
-
-			<div class="form-group">
-				<div class="col-xs-6">
-					<input type="text" id="building_id" class="form-control" placeholder="Building Account Number">
-				</div>
-				<div class="col-xs-6">
-					<button id="findBuilding" class="btn btn-primary btn-block">Find Building</button>
-				</div>
-			</div>
-
-			<div class="col-xs-12" style="height: 15px;"></div>
-
-			<div class="col-xs-12" id="building_information">
-				
-			</div>
-			
-		</div>
 	
 
     <div id="mapdiv" class="col-md-12"></div>
@@ -248,33 +254,52 @@
         mymap.addControl(sidebar);
        
 
-        //sidebar.show();
+        
 
-        //Easy button
-        var helloPopup = L.popup().setContent('Hello World!');
+      
 
-        L.easyButton('glyphicon glyphicon-transfer', function(){
-            sidebar.toggle();
-        }).addTo(mymap);
-
-        //Scale
-        L.control.scale({position: 'bottomleft' , maxWidth: '200', imperial: false }).addTo(mymap);
+       
 
         //ZOOM CONTROL
         L.control.zoom({position:"topright"}).addTo(mymap);
 
+        //LAYER CONTROL
+        var baseLayers = {
+            "Open Street Map Hot": OpenStreetMap_HOT,
+            "Open Street Map": openStreetMap,
+            "Open TopoMap": OpenTopoMap,
+            "Esri World Imagery": Esri_WorldImagery,
+        };
+
+        var control_layers = L.control.layers(baseLayers, overlays).addTo(mymap);
+
         //MEASURE
         L.control.polylineMeasure({position:"topright"}).addTo(mymap);
+
+        //DRAW CONTROL OR GEOMAN -> go documentation of geoman
+        mymap.pm.addControls({  
+            position: 'topright',  
+            drawMarker: true,
+            drawPolyline: true,
+            drawPolygon: true,
+            drawCircleMarker: false,
+            rotateMode: false,
+            drawCircle: false,
+            drawText: false,
+            drawRectangle: false,
+            editMode: false,
+            dragMode: false,
+            cutPolygon: false,
+            removalMode: true,
+        });
+
+
+ 
 
         //MOUSE POSITION
         L.control.mousePosition({position: 'bottomright'}).addTo(mymap);
 
-        //DRAW CONTROL OR GEOMAN  
-        mymap.pm.addControls({  
-            position: 'topleft',  
-            drawCircleMarker: false,
-            rotateMode: false,
-        }); 
+       
 
         mymap.on("pm:create", function(e){
             console.log(e);
@@ -286,17 +311,15 @@
             height: 200,
             width: 200,
         }).addTo(mymap);
+        
+
+         //Scale
+         L.control.scale({position: 'bottomright' , maxWidth: '200', imperial: false }).addTo(mymap);
 
 
-        //LAYER CONTROL
-        var baseLayers = {
-            "Open Street Map Hot": OpenStreetMap_HOT,
-            "Open Street Map": openStreetMap,
-            "Open TopoMap": OpenTopoMap,
-            "Esri World Imagery": Esri_WorldImagery,
-        };
+      
 
-        var control_layers = L.control.layers(baseLayers, overlays).addTo(mymap);
+        
 
      
         //DATA LOADING OPERATIONS
