@@ -49,8 +49,6 @@
 
 </head>
 <body>
-
-        
     
     <div id="sidebar" class="sidebar collapsed">
         <!-- Nav tabs -->
@@ -72,10 +70,6 @@
                     Home
                     <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
                 </h1>
-
-           
-			
-		
 
 
             </div>
@@ -160,7 +154,7 @@
 
             <div class="sidebar-pane" id="building">
                 <h1 class="sidebar-header">
-                    Buildings
+                    Buildings 
                     <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
                 </h1>
 
@@ -208,6 +202,10 @@
         var overlays;
         var lyrSearch;
 
+        var layerValves;
+        var layerPipelines;
+        var layerBuildings;
+
         var valves_array = [];
         var pipelines_array = [];
         var buildings_array = [];
@@ -254,12 +252,6 @@
         mymap.addControl(sidebar);
        
 
-        
-
-      
-
-       
-
         //ZOOM CONTROL
         L.control.zoom({position:"topright"}).addTo(mymap);
 
@@ -294,8 +286,6 @@
         });
 
 
- 
-
         //MOUSE POSITION
         L.control.mousePosition({position: 'bottomright'}).addTo(mymap);
 
@@ -316,26 +306,56 @@
          //Scale
          L.control.scale({position: 'bottomright' , maxWidth: '200', imperial: false }).addTo(mymap);
 
-
-      
-
-        
-
      
+
         //DATA LOADING OPERATIONS
 
-        //VALVE
-        var valves = L.geoJSON.ajax('data/valves_105.geojson', {pointToLayer: style_valves}).
-            addTo(mymap);
+        //HOME
+        load_valves();
+        load_pipelines();
+        load_buildings();
 
-        //automatic adjuster to maps
-        valves.on('data:loaded', function(){
-            mymap.fitBounds(valves.getBounds());
-           $("#valve_id").autocomplete({
+
+        //VALVE
+
+        //connect to database to load data _updated napod ni sya ug data na live ginafeed sa table
+        function load_valves() {
+            $.ajax({
+                url:'load_data.php',
+                data: {table:'valves'},
+                type: 'POST',
+                success: function(response) {
+                    if (response.trim().substr(0,5) =='ERROR'){
+                        //console.log(response);
+                    } else {
+                        //console.log(response);
+                        var jsnValve = JSON.parse(response); //unsa ning parse?
+                        //console.log(jsnValve);
+
+                        if (layerValves) {
+                            layerValves.remove();
+                            control_layers.removeLayer(layerValves);
+                        }
+
+                        layerValves = L.geoJSON(jsnValve, {pointToLayer: style_valves})
+                            .addTo(mymap);
+
+                        //Overlay Valves
+                         control_layers.addOverlay(layerValves, "Valves");
+                         mymap.fitBounds(layerValves.getBounds());
+
+                    }
+                    //console.log(response);
+                },
+                error: function(xhr, status, error) {
+                    console.log("ERROR: "+error);
+                }
+            });
+        }
+
+        $("#valve_id").autocomplete({
               source: valves_array,
-           }); 
-        
-        })
+        }); 
 
         function style_valves(json, latlng) {
             var att = json.properties;
@@ -348,7 +368,7 @@
             valves_array.push(att.valve_id); // got no idea sa .push() haha
 
             //color catergorize scenario
-            switch(att.type) {
+            switch(att.valve_type) {
                 case 'Air Release Valve':
                     color = '#e74c3c';
                     fill_color = '#e74c3c';
@@ -370,12 +390,10 @@
             var style = {radius: radius, color:color, fillColor:fill_color, fillOpacity:fillOpacity}
 
             //hover over objects
-            return L.circleMarker(latlng, style).bindTooltip("Valve ID: " + att.valve_id+"<br>Valve Type: "+att.type+"<br>Diameter (mm): "+att.diameter+"<br>Location: "+att.location);
+            return L.circleMarker(latlng, style).bindTooltip("Valve ID: " + att.valve_id+"<br>Valve Type: "+att.valve_type+"<br>Diameter (mm): "+
+                att.valve_diameter+"<br>Location: "+att.valve_location+"<br>Valve DMA ID: "+att.valve_dma_id+"<br>Valve Visibility: "+att.valve_visibility);
           
         }
-
-        //Overlay Valves
-        control_layers.addOverlay(valves, "Valves")
 
         //Find valves by using jquery, then show it when retain value == attributes_value from the function
         $("#findValve").click(function(){
@@ -401,7 +419,7 @@
 
                 $("#valve_information").html("Valve Type: "+att.type+"<br>DMA ID: "+att.dma_id+
                     "<br>Diamter (mm): "+ att.diamter+"<br>turn Status: "+att.turn+"<br>Visibility: "
-                    +att.visibility+"<br>Location: "+att.location);
+                    +att.visibility+"<br>Location: "+att.location); 
 
            } else {
                 $("#valve_error").html("valve not found");
@@ -410,18 +428,54 @@
 
 
         //PIPELINES
-        var pipelines = L.geoJSON.ajax('data/pipelines_105.geojson', {style: style_pipelines, 
-            onEachFeature: process_pipelines}).addTo(mymap);
 
-       
         $("#pipeline_id").autocomplete({
             source: pipelines_array,
         });
+
+        function  load_pipelines() {
+            $.ajax({
+                url:'load_data.php',
+                data: {table:'pipelines'},
+                type: 'POST',
+                success: function(response) {
+                    if (response.trim().substr(0,5) =='ERROR'){
+                        //console.log(response);
+                    } else {
+                        //console.log(response);
+                        var jsnPipeline = JSON.parse(response); //unsa ning parse?
+                        // console.log(jsnPipeline);
+
+                        if (layerPipelines) {
+                            layerPipelines.remove();
+                            control_layers.removeLayer(layerPipelines);
+                        }
+
+                        layerPipelines= L.geoJSON(jsnPipeline, {style: style_pipelines, 
+                            onEachFeature: process_pipelines}).addTo(mymap);
+
+                        //Overlay Valves
+                         control_layers.addOverlay(layerPipelines, "Pipelines");
+                         mymap.fitBounds(layerPipelines.getBounds());
+
+                    }
+                    //console.log(response);
+                },
+                error: function(xhr, status, error) {
+                    console.log("ERROR: "+error);
+                }
+            });
+        }
+
+        $("#pipeline_id").autocomplete({
+            source: pipelines_array,
+        });
+
     
         function style_pipelines(json) {
             var att = json.properties;
 
-            switch(att.category) {
+            switch(att.pipeline_category) {
                 case 'Distribution Pipeline':
                     color = '#27ae60';
                     fill_color = '#27ae60';
@@ -448,10 +502,9 @@
             pipelines_array.push(att.pipe_id);
 
             //Hover to show deails
-            lyr.bindTooltip("Pipe ID: "+att.pipe_id+"<br>Diameter: "+att.diameter+"<br>Location: "+att.location+"<br>Category: "+att.category+"<br>Length: "+att.length);
+            lyr.bindTooltip("Pipe ID: "+att.pipe_id+"<br>Diameter: "+att.pipeline_diameter+"<br>Location: "+
+                att.pipeline_location+"<br>Category: "+att.pipeline_category+"<br>Length: "+att.pipeline_length);
         }
-
-        control_layers.addOverlay(pipelines, "Pipelines");
 
         $("#findPipeline").click(function(){
             var pipeline_id = $("#pipeline_id").val();
@@ -472,9 +525,9 @@
                 mymap.fitBounds(lyr.getBounds());
                 valves.bringToFront();
 
-                $("#pipeline_information").html("Category: "+att.category+"<br>DMA ID: "+att.
-                    dma_id+"<br>Material: "+att.material+"<br>Length: "+att.length+"<br>Location: "+
-                    att.location);
+                $("#pipeline_information").html("Category: "+att.pipeline_category+"<br>DMA ID: "+
+                    att.pipeline_dma_id+"<br>Material: "+att.pipeline_material+"<br>Length: "+
+                    att.pipeline_length+"<br>Location: "+att.pipeline_location);
 
            } else {
                 $("#pipeline_error").html("Pipeline not found");
@@ -482,21 +535,57 @@
         });
 
 
-         //BUILDINGS
-         var buildings = L.geoJSON.ajax('data/buildings_105.geojson', {style:style_buildings, onEachFeature:process_buildings}).addTo(mymap);
+        //BUILDINGS
+        
+        function load_buildings() {
+            $.ajax({
+                url:'load_data.php',
+                data: {table:'buildings'},
+                type: 'POST',
+                success: function(response) {
+                    if (response.trim().substr(0,5) =='ERROR'){
+                        //console.log(response);
+                    } else {
+                        //console.log(response);
+                        var jsnBuilding = JSON.parse(response); //unsa ning parse?
+                        // console.log(jsnPipeline);
+
+                        if (layerBuildings) {
+                            layerBuildings.remove();
+                            control_layers.removeLayer(layerBuildings);
+                        }
+
+                        layerBuildings= L.geoJSON(jsnBuilding, {style:style_buildings, 
+                            onEachFeature:process_buildings}).addTo(mymap);
+
+                        //Overlay Valves
+                         control_layers.addOverlay(layerBuildings, "Buildings");
+                         mymap.fitBounds(layerBuildings.getBounds());
+
+                    }
+                    //console.log(response);
+                },
+                error: function(xhr, status, error) {
+                    console.log("ERROR: "+error);
+                }
+            });
+
+        };
 
          $("#building_id").autocomplete({
             source: buildings_array,
          });
 
+
+
          function style_buildings(json){
             var att = json.properties;
-            var storey = att.storey;
+            var storey = att.building_storey;
             var color;
             var fill_color;
             var fill_opacity = 1;
 
-            switch(att.category) {
+            switch(att.building_category) {
                 case 'Building':
                     if (storey>=10) {
                         color = '#922b21';
@@ -540,13 +629,14 @@
 
             buildings_array.push(att.account_no);
 
-            building_array.push(att.account_no);
+            buildings_array.push(att.account_no);
 
             //When Click details show up
-            lyr.bindPopup("Catergory: "+att.category+"<br>Storey: "+att.storey+"<br>Location :"+att.location+"<br>Account Number: " + att.account_no);
+            lyr.bindPopup("Catergory: "+att.building_category+"<br>Storey: "+att.building_storey+"<br>Location :"+
+                att.building_location+"<br>Account Number: " + att.account_no+"<br>Building_Population: "+att);
          }
 
-         control_layers.addOverlay(buildings, "Buildings");
+         
 
          $("#findBuilding").click(function(){
             var building_id = $("#building_id").val();
