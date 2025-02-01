@@ -314,7 +314,8 @@
         load_valves();
         load_pipelines();
         load_buildings();
-
+    
+        
 
         //VALVE
 
@@ -395,35 +396,37 @@
           
         }
 
-        //Find valves by using jquery, then show it when retain value == attributes_value from the function
-        $("#findValve").click(function(){
+       
+        $('#findValve').click(function() {
             var valve_id = $("#valve_id").val();
             
-            var lyr =  returnLayerByAttribute(valves, "valve_id", valve_id);
+            returnLayerByAttribute("valves", "valve_id", valve_id, function(lyr){
+                console.log(lyr);
 
+                if (lyr) {
+                    var att = lyr.feature.properties;
 
-           if (lyr) {
-                var att = lyr.feature.properties;
+                    if (lyrSearch) {
+                        lyrSearch.remove();
+                    }
+        
+                    //console.log(lyr.getLatLng());
 
-                if (lyrSearch) {
-                    lyrSearch.remove();
-                }
-    
-                //console.log(lyr.getLatLng());
+                    lyrSearch = L.circle(lyr.getLatLng(), {radius: 15, color:'red', weight:10,
+                        opacity:0.6, fillOpacity:0.3}).addTo(mymap);
 
-                lyrSearch = L.circle(lyr.getLatLng(), {radius: 10, color:'red', weight:10,
-                    opacity:0.5, fillOpacity:0.3}).addTo(mymap);
+                    mymap.setView(lyr.getLatLng(), 20);
+                    layerValves.bringToFront();
 
-                mymap.setView(lyr.getLatLng(), 20);
-                valves.bringToFront();
-
-                $("#valve_information").html("Valve Type: "+att.type+"<br>DMA ID: "+att.dma_id+
-                    "<br>Diamter (mm): "+ att.diamter+"<br>turn Status: "+att.turn+"<br>Visibility: "
-                    +att.visibility+"<br>Location: "+att.location); 
+                    $("#valve_information").html("Valve Type: "+att.valve_type+"<br>DMA ID: "+att.valve_dma_id+
+                        "<br>Diamter (mm): "+ att.valve_diamter+"<br>Remarks: "+att.valve_remarks +"<br>turn Status: "+att.valve_turn+"<br>Visibility: "
+                        +att.valve_visibility+"<br>Location: "+att.valve_location); 
 
            } else {
                 $("#valve_error").html("valve not found");
            }
+            });
+
         });
 
 
@@ -456,7 +459,7 @@
 
                         //Overlay Valves
                          control_layers.addOverlay(layerPipelines, "Pipelines");
-                         mymap.fitBounds(layerPipelines.getBounds());
+                    
 
                     }
                     //console.log(response);
@@ -509,10 +512,8 @@
         $("#findPipeline").click(function(){
             var pipeline_id = $("#pipeline_id").val();
             
-            var lyr =  returnLayerByAttribute(pipelines, "pipe_id", pipeline_id);
-
-
-           if (lyr) {
+            returnLayerByAttribute("pipelines", "pipe_id", pipeline_id, function(lyr){
+                if (lyr) {
                 var att = lyr.feature.properties;
 
                 if (lyrSearch) {
@@ -523,17 +524,21 @@
                     opacity:0.5}}).addTo(mymap);
 
                 mymap.fitBounds(lyr.getBounds());
-                valves.bringToFront();
+                layerPipelines.bringToFront();
 
                 $("#pipeline_information").html("Category: "+att.pipeline_category+"<br>DMA ID: "+
                     att.pipeline_dma_id+"<br>Material: "+att.pipeline_material+"<br>Length: "+
-                    att.pipeline_length+"<br>Location: "+att.pipeline_location);
+                    att.pipeline_length+"<br>Location: "+att.pipeline_location +"<br>Construction Method: "+ att.pipeline_method);
 
-           } else {
-                $("#pipeline_error").html("Pipeline not found");
-           }
+                } else {
+                     $("#pipeline_error").html("Pipeline not found");
+                }
+            });
+
         });
 
+
+           
 
         //BUILDINGS
         
@@ -560,7 +565,7 @@
 
                         //Overlay Valves
                          control_layers.addOverlay(layerBuildings, "Buildings");
-                         mymap.fitBounds(layerBuildings.getBounds());
+                        
 
                     }
                     //console.log(response);
@@ -575,7 +580,6 @@
          $("#building_id").autocomplete({
             source: buildings_array,
          });
-
 
 
          function style_buildings(json){
@@ -609,7 +613,7 @@
                     color = '7dcea0';
                     fill_color = '7dcea0';
                     fill_opacity = 0.8;
-                    break;
+                    break;  
                 case 'Open Plot':
                     color = '#f9e79f';
                     fill_color = '#f9e79f';
@@ -633,58 +637,78 @@
 
             //When Click details show up
             lyr.bindPopup("Catergory: "+att.building_category+"<br>Storey: "+att.building_storey+"<br>Location :"+
-                att.building_location+"<br>Account Number: " + att.account_no+"<br>Building_Population: "+att);
+                att.building_location+"<br>Account Number: " + att.account_no+"<br>Building Population: "+att.building_population);
          }
 
          
 
          $("#findBuilding").click(function(){
-            var building_id = $("#building_id").val();
+            var account_no = $("#building_id").val();
             
-            var lyr =  returnLayerByAttribute(buildings, "account_no", building_id);
-
-
-           if (lyr) {
+            returnLayerByAttribute("buildings", "account_no", account_no, function(lyr){
+                if (lyr) {
                 var att = lyr.feature.properties;
 
-                if (lyrSearch) {
-                    lyrSearch.remove();
-                }
+                    if (lyrSearch) {
+                        lyrSearch.remove();
+                    }
 
-                lyrSearch = L.geoJSON(lyr.toGeoJSON(), {style:{color:'red', weight:10,
-                    opacity:1, fillOpacity:0}}).addTo(mymap);
+                    lyrSearch = L.geoJSON(lyr.toGeoJSON(), {style:{color:'red', weight:10,
+                        opacity:1, fillOpacity:0}}).addTo(mymap);
 
-                mymap.fitBounds(lyr.getBounds());
+                    mymap.fitBounds(lyr.getBounds());
 
-                $("#building_information").html("Category: "+att.category+"<br>Storey: "+att.storey+
-                    "<br>Population: "+att.population+"<br>Location: "+att.location+"<br>DMA ID: "+
-                    att.dma_id);
+                    $("#building_information").html("Category: "+att.building_category+"<br>Storey: "+att.building_storey+
+                        "<br>Population: "+att.building_population+"<br>Location: "+att.building_location+"<br>DMA ID: "+
+                        att.building_dma_id);
 
-           } else {
-                $("#building_error").html("Building not found");
-           }
+                    } else {
+                            $("#building_error").html("Building not found");
+                    }
+            });
         });
 
+
+           
+
          //GENERAL FUNCTIONS
-         function returnLayerByAttribute(layer,attribute_name, attribute_value) {
-            //debugging layer
-            //console.log(layer);
+        function returnLayerByAttribute(table, field, value, callback) {
+            $.ajax({
+                url:'find_data.php',
+                data: {table:table, field:field, value:value},
+                type:'POST',
+                success: function(response) {
+                    if (response.trim().substr(0,5) =='ERROR'){
+                        console.log(response);
+                    } else {
 
-            var all_layers = layer.getLayers();
-            //console.log(all_layers) --> for debugging
+                        //debugging and uderstanding the code
+                            //more general view raw data comming from the database
+                                var jsn = JSON.parse(response);
+                                // console.log(jsn);
+                            
+                            //moving the raw data into Leaflet format
+                                var layer = L.geoJSON(jsn);
+                                // console.log(layer);
 
-            //[0].feature.properties
-            for (var i=0; i<all_layers.length; i++) {
-                var retain_value = all_layers[i].feature.properties[attribute_name];
-                //console.log(retain_value)
+                            //more specific to under layer
+                                var layer = layer.getLayers();
+                                // console.log(layer)
 
-                if (retain_value == attribute_value){
-                    return all_layers[i]
+                        if (layer.length>0) {
+                            callback(layer[0]);
+                            
+                        } else {
+                            callback(false);
+                        }
+                    }
+                   
+                },
+                error: function(xhr, status, error) {
+                    console.log("ERROR: "+error);
                 }
-            }
-            
-            return false;
-         }
+            })
+        } 
 
         
     
