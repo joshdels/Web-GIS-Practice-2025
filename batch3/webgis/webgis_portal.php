@@ -61,67 +61,142 @@
             </ul>
         </div>
         
-        <!-- Tab panes -->
+        <!-- Tab Panels -->
         <div class="sidebar-content">
-
-
+            <!-- Home Tab -->
             <div class="sidebar-pane" id="home">
-                <h1 class="sidebar-header">
-                    Home
-                    <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                <h1 class="sidebar-header">Home<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                </h1>
+            </div>
+
+            <!-- Valve Tab -->
+            <div class="sidebar-pane" id="valve">
+                <h1 class="sidebar-header">Valves<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
                 </h1>
 
-
-            </div>
-
-        <div class="sidebar-pane" id="valve">
-            <h1 class="sidebar-header">
-                Valves
-                <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
-            </h1>
-
-            <div id="divValve" class="col-xs-12">
-
-                <div class="col-xs-12" style="height: 10px;"></div>
-
-                <div class="col-xs-12">
-                    <p class="text-center bold">Valve Information</p>
+                <div id="divValve" class="col-xs-12">
+                    <div class="col-xs-12" style="height: 10px;"></div>
                 </div>
-                <div class="col-xs-12 errorMsg" id="valve_error"></div>
-
-                <div class="col-xs-12" style="height: 10px;"></div>
-
-                <div class="form-group">
-                    <div class="col-xs-6">
-                        <input type="text" id="valve_id" class="form-control" 
-                        placeholder="Valve ID">
+                
+                    <div class="col-xs-12">
+                        <p class="text-center bold">Valve Information</p>
                     </div>
-                    <div class="col-xs-6">
-                        <button id="findValve" class="btn btn-primary btn-block">
-                        Find Valve</button>
+
+                    <div class="col-xs-12 errorMsg" id="valve_error"></div>
+
+                    <div class="col-xs-12" style="height: 10px;"></div>
+
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <input type="text" id="valve_id" class="form-control" 
+                            placeholder="Valve ID">
+                        </div>
+                        <div class="col-xs-6">
+                            <button id="findValve" class="btn btn-primary btn-block">
+                            Find Valve</button>
+                        </div>
                     </div>
-                </div>
 
-                <div class="col-xs-12" style="height: 15px;"></div>
+                    <div class="col-xs-12" style="height: 15px;"></div>
+                    <div class="col-xs-12" id="valve_information"></div>
+                    <div class="col-xs-12" style="height: 60px;"> </div>
 
-                <div class="col-xs-12" id="valve_information">
+                    <!-- adding lower part html user add details -->
+                    <div id="newValve" class="col-xs-12"></div>
+                        <div class = "col-xs-12">
+                            <button type = "button" class="btn btn-info btn-block" id="btn_valve_form">Insert New Valve</button>
+                        </div>
+
+                        <div class="col-xs-12" style="height: 10px;"> </div>
                     
-                </div>
 
+                    <!-- valve_id -->
+                    <div id="valve_id" class="col-xs-12 new_feature"></div>
+                        <label class="control-label col-sm-4" for="valve_id_new">Valve ID</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="valve_id_new" id="valve_id_new">
+                        </div>
+                    
+                        
+                    <!-- valve_type -->
+                    <div class="col-xs-12" style="height: 20px;"> </div>
+                        <label class="control-label col-sm-4" for="valve_type"> Valve Type </label>
+                        <div class="col-sm-8">
+                            <select type="text" class="form-control" name="valve_type" id="valve_type">
+                                <option value=""></option>
+                                <option value="Gate Valve">Gate Valve</option>
+                                <option value="Washout Valve">Washout Valve</option>
+                                <option value="Air Release Valve">Air Release Valve</option>
+                            </select>
+                        </div>
+                            
+                    <!-- valve_dma_id -->
+                    <div class="col-xs-12" style="height: 10px;"> </div>
+                        <label class="control-label col-sm-4" for="valve_dma_id"> DMA ID </label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="valve_dma_id" id="valve_dma_id">
+                        </div>
+                        
+                    <!-- valve_diamter -->
+                    <div class="col-xs-12" style="height: 10px;"> </div>
+                        <label class="control-label col-sm-4" for="valve_diamter"> Diamter (mm) </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="valve_diamter" id="valve_diamter">
+                            </div>
+
+                    <!-- valve_Visibility -->
+                    <div class="col-xs-12" style="height: 10px;"> </div>
+                    <label class="control-label col-sm-4" for="valve_visbility"> Visibility </label>
+                        <div class="col-sm-8">
+                            <select type="text" class="form-control" name="valve_visbility" id="valve_visbility">
+                                <option value=""></option>
+                                <option value="Vislibile">Visible</option>
+                                <option value="Invisible">Invisible</option>
+                            </select>
+                        </div>
+
+                    <!-- valve_Location -->
+                    <div class="col-xs-12" style="height: 10px;"> </div>
+                    <label class="control-label col-sm-4" for="valve_location"> Location </label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="valve_location" id="valve_location">
+                        </div>
+
+                    <!-- valve_geometry -->
+                    <div class="col-xs-12" style="height: 10px;"> </div>
+                    <label class="control-label col-sm-4" for="valve_geometry"> Geometry </label>
+                        <div class="col-sm-8">
+                            <textarea name="valve_id_new" id="valve_id_new" disabled> </textarea>
+                        </div>
+
+                        <div class="col-xs-12" style="height: 10px;"> </div>
+
+                    <!-- cancel/insert button -->
+                        <!-- cancel button -->
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-danger btn block" id="btn_valve_cancel"> 
+                                Cancel 
+                            </button>
+                        </div>
+                        <!-- insert button -->
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-success btn block" id="btn_valve_insert"> 
+                                Insert Valve 
+                            </button>
+                        </div>                 
+                        <div class="col-xs-12" style="height: 10px;"> </div>
             </div>
+            
+            
 
-
-        </div>
-    
+            <!-- Pipeline Tabe -->
             <div class="sidebar-pane" id="pipeline">
-                <h1 class="sidebar-header">
-                    Pipelines
-                    <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                <h1 class="sidebar-header">Pipelines<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
                 </h1>
 
                 <div id="divPipeline" class="col-xs-12">
-
                     <div class="col-xs-12" style="height: 10px;"></div>
+                </div>
 
                     <div class="col-xs-12">
                         <p class="text-center bold">Pipeline Information</p>
@@ -140,58 +215,231 @@
                     </div>
 
                     <div class="col-xs-12" style="height: 15px;"></div>
-
                     <div class="col-xs-12" id="pipeline_information">
-                        
-                    </div>
+                    <div class="col-xs-12" style="height: 60px;"> </div>
 
-                </div>
+                    <!-- adding lower part html user add details -->
+                    <div id="newPipeline" class="col-xs-12"> </div>
+                        <div class = "col-xs-12">
+                            <button type = "button" class="btn btn-info btn-block" id= "btn_valve_form">
+                                Insert New Pipeline
+                            </button>
+                        </div>
+
+                    
+
+                    <!-- pipeline_id -->
+                    <div class="col-xs-12" style="height: 10px;"> </div>
+                        <div id="pipeline_id" class="col-xs-12 new_feature"></div>
+                        <label class="control-label col-sm-4" for="pipeline_id_new">Pipeline ID</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="pipeline_id_new" id="pipeline_id_new">
+                        </div>
+                        
+                    <!-- pipeline_type -->
+                    <div class="col-xs-12" style="height: 20px;"> </div>
+                        <label class="control-label col-sm-4" for="pipeline_type"> Pipeline Type </label>
+                        <div class="col-sm-8">
+                            <select type="text" class="form-control" name="pipeline_type" id="pipeline_type">
+                                <option value=""></option>
+                                <option value="Gate Valve">Gate Valve</option>
+                                <option value="Washout Valve">Washout Valve</option>
+                                <option value="Air Release Valve">Air Release Valve</option>
+                            </select>
+                        </div>
+                            
+                    <!-- pipeline_dma_id -->
+                    <div class="col-xs-12" style="height: 10px;"> </div>
+                        <label class="control-label col-sm-4" for="pipeline_dma_id">DMA ID</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="pipeline_dma_id" id="pipeline_dma_id">
+                        </div>
+                        
+                    <!-- pipeline_diamter -->
+                    <div class="col-xs-12" style="height: 10px;"> </div>
+                    <label class="control-label col-sm-4" for="pipeline_diamter">Diamter (mm)</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="pipeline_diamter" id="pipeline_diamter">
+                        </div>           
+
+                    <!-- pipeline_visibility -->
+                    <div class="col-xs-12" style="height: 10px;"> </div>
+                    <label class="control-label col-sm-4" for="pipeline_visbility">Visibility</label>
+                        <div class="col-sm-8">
+                            <select type="text" class="form-control" name="pipeline_visbility" id="pipeline_visbility">
+                                <option value=""></option>
+                                <option value="Vislibile">Visible</option>
+                                <option value="Invisible">Invisible</option>
+                            </select>
+                        </div>
+
+                    <!-- pipeline_Location -->
+                    <div class="col-xs-12" style="height: 10px;"> </div>
+                    <label class="control-label col-sm-4" for="pipeline_location">Location</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="pipeline_location id="pipeline_location>
+                        </div>
+
+                    <!-- pipeline_geometry -->
+                    <div class="col-xs-12" style="height: 10px;"> </div>
+                    <label class="control-label col-sm-4" for="pipeline_geometry"> Geometry </label>
+                        <div class="col-sm-8">
+                            <textarea name="pipeline_geometry" id="pipeline_geometry"> disabled </textarea>
+                        </div>
+
+                        <div class="col-xs-12" style="height: 10px;"> </div>
+
+                    <!-- cancel/insert button -->
+                        <!-- cancel button -->
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-danger btn block" id="btn_pipeline_cancel"> 
+                                Cancel 
+                            </button>
+                        </div>
+                        <!-- insert button -->
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-success btn block" id="btn_pipeline_insert"> 
+                                Insert Valve 
+                            </button>
+                        </div>                 
+                        <div class="col-xs-12" style="height: 10px;"> </div>
+                        
+                
+            </div>
+        </div>
 
              
+        <div class="sidebar-pane" id="building">
+            <h1 class="sidebar-header">
+                Buildings 
+                <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+            </h1>
 
-            </div>
+            <div id="divBuilding" class="col-xs-12">
 
+                <div class="col-xs-12" style="height: 10px;"></div>
 
-            <div class="sidebar-pane" id="building">
-                <h1 class="sidebar-header">
-                    Buildings 
-                    <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
-                </h1>
+                <div class="col-xs-12">
+                    <p class="text-center bold">Building Information</p>
+                </div>
+                <div class="col-xs-12 errorMsg" id="building_error"></div>
 
-                <div id="divBuilding" class="col-xs-12">
+                <div class="col-xs-12" style="height: 10px;"></div>
 
-                    <div class="col-xs-12" style="height: 10px;"></div>
-
-                    <div class="col-xs-12">
-                        <p class="text-center bold">Building Information</p>
+                <div class="form-group">
+                    <div class="col-xs-6">
+                        <input type="text" id="building_id" class="form-control" placeholder="Building Account Number">
                     </div>
-                    <div class="col-xs-12 errorMsg" id="building_error"></div>
-
-                    <div class="col-xs-12" style="height: 10px;"></div>
-
-                    <div class="form-group">
-                        <div class="col-xs-6">
-                            <input type="text" id="building_id" class="form-control" placeholder="Building Account Number">
-                        </div>
-                        <div class="col-xs-6">
-                            <button id="findBuilding" class="btn btn-primary btn-block">Find Building</button>
-                        </div>
+                    <div class="col-xs-6">
+                        <button id="findBuilding" class="btn btn-primary btn-block">Find Building</button>
                     </div>
+                </div>
 
-                    <div class="col-xs-12" style="height: 15px;"></div>
+                <div class="col-xs-12" style="height: 15px;"></div>
+                <div class="col-xs-12" id="building_information">
+                <div class="col-xs-12" style="height: 60px;"> </div>
+                
+                </div>
 
-                    <div class="col-xs-12" id="building_information">
-                    
-                    </div>
+                <!-- adding lower part html user add details -->
+                <div id="newBuilding" class="col-xs-12"> </div>
+
+                <div class = "col-xs-12">
+                    <button type = "button" class="btn btn-info btn-block" id= "btn_builing_form">
+                        Insert New Building
+                    </button>
 
                 </div>
-            </div>
 
+                <div class="col-xs-12" style="height: 10px;"> </div>
+
+                <!--building_id -->
+                    <div id="building_id" class="col-xs-12 new_feature"></div>
+                    
+                    <label class="control-label col-sm-4" for="building_id_new">Building ID </label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" name="building_id_new" id="building_id_new">
+                    </div>
+
+                    <div class="col-xs-12" style="height: 20px;"> </div>
+                    
+                <!-- building_type -->
+                    <label class="control-label col-sm-4" for="building_type">Building Type</label>
+                    <div class="col-sm-8">
+                        <select type="text" class="form-control" name="building_type" id="building">
+                            <option value=""></option>
+                            <option value="Gate Valve">Gate Valve</option>
+                            <option value="Washout Valve">Washout Valve</option>
+                            <option value="Air Release Valve">Air Release Valve</option>
+                        </select>
+                    </div>
+                        
+                    <div class="col-xs-12" style="height: 10px;"> </div>
+
+                <!-- building_dma_id -->
+                    <label class="control-label col-sm-4" for="building_dma_id"> DMA ID </label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" name="building_dma_id" id="building_dma_id">
+                    </div>
+
+                    <div class="col-xs-12" style="height: 10px;"> </div>
+                    
+                <!-- building_diamter -->
+                <label class="control-label col-sm-4" for="building_diamter"> Diamter (mm) </label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" name="building_diamter" id="building_diamter">
+                    </div>
+
+                <!-- building_Visibility -->
+                <div class="col-xs-12" style="height: 10px;"> </div>
+                <label class="control-label col-sm-4" for="building_visbility">Visibility</label>
+                    <div class="col-sm-8">
+                        <select type="text" class="form-control" name="building_visbility" id="building_visbility">
+                            <option value=""></option>
+                            <option value="Vislibile">Visible</option>
+                            <option value="Invisible">Invisible</option>
+                        </select>
+                    </div>
+
+                <!-- building_Location -->
+                <div class="col-xs-12" style="height: 10px;"> </div>
+                <label class="control-label col-sm-4" for="building_location"> Location </label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" name="building_location" id="building_location">
+                    </div>
+
+                    
+
+
+                <!-- valve_geometry -->
+                <div class="col-xs-12" style="height: 10px;"> </div>
+                <label class="control-label col-sm-4" for="building_geometry"> Geometry </label>
+                    <div class="col-sm-8">
+                        <textarea name="building_id_new" id="building_id_new"> disabled </textarea>
+                    </div>
+
+                <!-- cancel/insert button -->
+                <div class="col-xs-12" style="height: 10px;"> </div>
+                    <!-- cancel button -->
+                    <div class="col-sm-6">
+                        <button type="button" class="btn btn-danger btn block" id="btn_valve_cancel"> 
+                            Cancel 
+                        </button>
+                    </div>
+                    <!-- insert button -->
+                    <div class="col-sm-6">
+                        <button type="button" class="btn btn-success btn block" id="btn_valve_insert"> 
+                            Insert Valve 
+                        </button>
+                    </div>                 
+                    <div class="col-xs-12" style="height: 10px;"> </div>
+
+                
         </div>
+         </div>
             
+        </div>
     </div>
-
-	
 
     <div id="mapdiv" class="col-md-12"></div>
 
