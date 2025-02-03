@@ -122,7 +122,7 @@
                             </div>
                         
                         <!-- valve_type -->
-                        <div class="col-xs-12" style="height: 20px;"> </div>
+                        <div class="col-xs-12" style="height: 10px;"> </div>
                             <label class="control-label col-sm-4" for="valve_type"> Valve Type </label>
                             <div class="col-sm-8">
                                 <select type="text" class="form-control" name="valve_type" id="valve_type">
@@ -142,9 +142,9 @@
                             
                         <!-- valve_diamter -->
                         <div class="col-xs-12" style="height: 10px;"> </div>
-                            <label class="control-label col-sm-4" for="valve_diamter"> Diamter (mm) </label>
+                            <label class="control-label col-sm-4" for="valve_diameter"> Diamter (mm) </label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" name="valve_diamter" id="valve_diamter">
+                                    <input type="text" class="form-control" name="valve_diameter" id="valve_diameter">
                                 </div>
 
                         <!-- valve_Visibility -->
@@ -169,7 +169,7 @@
                         <div class="col-xs-12" style="height: 10px;"> </div>
                         <label class="control-label col-sm-4" for="valve_geometry"> Geometry </label>
                             <div class="col-sm-8">
-                                <textarea name="valve_id_new" id="valve_id_new" disabled> </textarea>
+                                <textarea name="valve_geometry" id="valve_geometry" disabled> </textarea>
                             </div>
 
                             <div class="col-xs-12" style="height: 10px;"> </div>
@@ -289,7 +289,7 @@
                         <div class="col-xs-12" style="height: 10px;"> </div>
                         <label class="control-label col-sm-4" for="pipeline_geometry"> Geometry </label>
                             <div class="col-sm-8">
-                                <textarea name="pipeline_geometry" id="pipeline_geometry"> disabled </textarea>
+                                <textarea name="pipeline_geometry" id="pipeline_geometry" disabled ></textarea>
                             </div>
 
                             <div class="col-xs-12" style="height: 10px;"> </div>
@@ -407,7 +407,7 @@
                 <div class="col-xs-12" style="height: 10px;"> </div>
                 <label class="control-label col-sm-4" for="building_geometry"> Geometry </label>
                     <div class="col-sm-8">
-                        <textarea name="building_id_new" id="building_id_new"> disabled </textarea>
+                        <textarea name="building_geometry" id="building_geometry" disabled></textarea>
                     </div>
 
                 <!-- cancel/insert button -->
@@ -529,10 +529,35 @@
         //MOUSE POSITION
         L.control.mousePosition({position: 'bottomright'}).addTo(mymap);
 
-       
-
+        //This is to capture geoman polygon details 
         mymap.on("pm:create", function(e){
-            console.log(e);
+            //console.log(e);
+            var jsn = e.layer.toGeoJSON().geometry;
+            console.log(jsn);
+            var jsn_modified;
+
+            if (e.shape == 'Marker') {
+
+                if(confirm("Are you sure you want to add this new Valve")){
+                    jsn_modified = {type: 'Point', coordinates:jsn.coordinates};
+                    $("#valve_geometry").val(JSON.stringify(jsn_modified));
+                }
+            }
+
+            if (e.shape == 'Line') {
+                if(confirm("Are you sure you want to add this new Pipeline?")){
+                    jsn_modified = {type: 'MultiLineString', coordinates:[jsn.coordinates]};
+                    $("#pipeline_geometry").val(JSON.stringify(jsn_modified));
+               }               
+            }
+
+            if (e.shape == 'Polygon') {
+                if(confirm("Are you sure you want to add this new Building")){
+                    jsn_modified = {type: 'MultiPolygon', coordinates:[jsn.coordinates]};
+                    $("#building_geometry").val(JSON.stringify(jsn_modified));
+                }
+            }   
+
         })
 
         //MINI MAP
@@ -545,7 +570,6 @@
 
          //Scale
          L.control.scale({position: 'bottomright' , maxWidth: '200', imperial: false }).addTo(mymap);
-
      
 
         //DATA LOADING OPERATIONS
@@ -556,7 +580,6 @@
         load_buildings();
     
         
-
         //VALVE
 
         //connect to database to load data _updated napod ni sya ug data na live ginafeed sa table
@@ -676,6 +699,48 @@
 
         $("#btn_valve_cancel").click(function(){
             $("#new_valve_information").hide();
+        });
+
+        $("#btn_valve_insert").click(function(){
+            var valve_id = $("#valve_id_new").val();
+            var valve_type = $("#valve_type").val();
+            var valve_dma_id = $("#valve_dma_id").val();
+            var valve_diameter = $("#valve_diameter").val();
+            var valve_visbility = $("#valve_visbility").val();
+            var valve_location = $("#valve_location").val();
+            var valve_geometry = $("#valve_geometry").val();
+
+            if (valve_id == "" || valve_type == "" || valve_dma_id == "" || valve_geometry == "") {
+                    $("#valve_status").html("Please fill up all the fields");
+            } else {
+                $.ajax({
+                    url:'insert_data.php',
+                    data:{
+                        valve_id: valve_id,
+                        valve_type: valve_type,
+                        valve_dma_id: valve_dma_id,
+                        valve_diameter: valve_diameter,
+                        valve_visibility: valve_visbility,
+                        valve_location: valve_location,
+                        valve_geometry: valve_geometry,
+                        request: 'valves',
+                    },
+                    type: 'POST',
+                    sucess:function(response) {
+                        if (response.trim().substr(0,5) =='ERROR'){
+                            console.log(response);
+                            $("#valve_status").html(response);
+                        } else {
+                            $("#valve_status").html("Valve Inserted Successfully!");
+                        }
+                    },
+                    error:function(xhr, status, error) {
+                        $("#valve_status").html(error);
+                    }
+                });
+            }
+            
+            //console.log(valve_id);
         });
 
         //PIPELINES
