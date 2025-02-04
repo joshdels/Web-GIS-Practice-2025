@@ -250,7 +250,7 @@
                             <div id="new_pipeline_information" class="col-xs-12 new_feature">
                             <label class="control-label col-sm-4" for="new_pipeline_id">Pipeline ID</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" name="new_pipeline_id" id="pipeline_id_new">
+                                <input type="text" class="form-control" name="new_pipeline_id" id="new_pipeline_id">
                             </div>
                             
                         <!-- pipeline_category -->
@@ -272,11 +272,11 @@
                                 <input type="text" class="form-control" name="pipeline_dma_id" id="pipeline_dma_id">
                             </div>
                             
-                        <!-- pipeline_diamter -->
+                        <!-- pipeline_diameter -->
                         <div class="col-xs-12" style="height: 10px;"> </div>
-                        <label class="control-label col-sm-4" for="pipeline_diamter">Diamter (mm)</label>
+                        <label class="control-label col-sm-4" for="pipeline_diameter">Diamter (mm)</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" name="pipeline_diamter" id="pipeline_diamter">
+                                <input type="text" class="form-control" name="pipeline_diameter" id="pipeline_diameter">
                             </div>           
 
                         <!-- pipeline_method -->
@@ -728,7 +728,7 @@
                     layerValves.bringToFront();
 
                     $("#valve_information").html("Valve Type: "+att.valve_type+"<br>DMA ID: "+att.valve_dma_id+
-                        "<br>Diamter (mm): "+ att.valve_diamter+"<br>Remarks: "+att.valve_remarks +"<br>turn Status: "+att.valve_turn+"<br>Visibility: "
+                        "<br>Diameter (mm): "+ att.valve_diameter+"<br>Remarks: "+att.valve_remarks +"<br>turn Status: "+att.valve_turn+"<br>Visibility: "
                         +att.valve_visibility+"<br>Location: "+att.valve_location); 
 
            } else {
@@ -752,7 +752,7 @@
             var valve_type = $("#valve_type").val();
             var valve_dma_id = $("#valve_dma_id").val();
             var valve_diameter = $("#valve_diameter").val();
-            var valve_visbility = $("#valve_visbility").val();
+            var valve_visibility = $("#valve_visibility").val();
             var valve_location = $("#valve_location").val();
             var valve_geometry = $("#valve_geometry").val();
 
@@ -766,7 +766,7 @@
                         valve_type: valve_type,
                         valve_dma_id: valve_dma_id,
                         valve_diameter: valve_diameter,
-                        valve_visibility: valve_visbility,
+                        valve_visibility: valve_visibility,
                         valve_location: valve_location,
                         valve_geometry: valve_geometry,
                         request: 'valves',
@@ -922,7 +922,7 @@
         //irecheck pud ni ugma
 
         $("#btn_pipeline_insert").click(function(){
-            var new_pipeline_id = $("#new_pipeline_id").val();
+            var pipeline_id = $("#new_pipeline_id").val();
             var pipeline_category = $("#pipeline_category").val();
             var pipeline_dma_id = $("#pipeline_dma_id").val();
             var pipeline_diameter = $("#pipeline_diameter").val();
@@ -930,25 +930,14 @@
             var pipeline_location = $("#pipeline_location").val();
             var pipeline_geometry = $("#pipeline_geometry").val();
             
-            if (new_pipeline_id == "" || pipeline_category == "" || pipeline_geometry == "") {
+            if (pipeline_id == "" || pipeline_category == "" || pipeline_geometry == "") {
                 $("#pipeline_status").html("Please fill up all the fields");
             } else {
-
-                console.log({
-                    pipeline_id: new_pipeline_id,
-                    pipeline_category: pipeline_category,
-                    pipeline_dma_id: pipeline_dma_id,
-                    pipeline_diameter: pipeline_diameter,
-                    pipeline_method: pipeline_method,
-                    pipeline_location: pipeline_location,
-                    pipeline_geometry: pipeline_geometry,
-                    request: 'pipelines',
-                });
 
                 $.ajax({
                     url:'insert_data.php',
                     data:{
-                        pipeline_id: new_pipeline_id,
+                        pipeline_id: pipeline_id,
                         pipeline_category: pipeline_category,
                         pipeline_dma_id: pipeline_dma_id,
                         pipeline_diameter: pipeline_diameter,
@@ -1056,7 +1045,7 @@
 
                 case 'Tin Shed':
                     color = '#7dcea0';
-                    fill_color = '7dcea0';
+                    fill_color = '#7dcea0';
                     fill_opacity = 0.8;
                     break;  
                 case 'Open Plot':
