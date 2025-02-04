@@ -49,6 +49,12 @@
             display: none;
         }
 
+        .successMsg {
+            text-align: center;
+            background-color: #85c1e9;
+            font-weight: bold;
+        }
+
     </style>
 
 
@@ -108,8 +114,13 @@
 
                     <!-- adding lower part html user add details -->
                     <div id="newValve" class="col-xs-12">
-                        <div class = "col-xs-12">
-                            <button type = "button" class="btn btn-info btn-block" id="btn_valve_form">Insert New Valve</button>
+                        <div class = "col-xs-8">
+                            <button type = "button" class="btn btn-info btn-block" id="btn_valve_form">
+                                Insert New Valve</button>
+                        </div>
+                        <div class = "col-xs-4">
+                            <button type = "button" class="btn btn-success btn-block" id="btn_valve_refresh">
+                                Refresh</button>
                         </div>
 
                         <div class="col-xs-12" style="height: 10px;"></div>
@@ -142,7 +153,7 @@
                             
                         <!-- valve_diamter -->
                         <div class="col-xs-12" style="height: 10px;"> </div>
-                            <label class="control-label col-sm-4" for="valve_diameter"> Diamter (mm) </label>
+                            <label class="control-label col-sm-4" for="valve_diameter"> Diameter (mm) </label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" name="valve_diameter" id="valve_diameter">
                                 </div>
@@ -151,7 +162,7 @@
                         <div class="col-xs-12" style="height: 10px;"> </div>
                         <label class="control-label col-sm-4" for="valve_visbility"> Visibility </label>
                             <div class="col-sm-8">
-                                <select type="text" class="form-control" name="valve_visbility" id="valve_visbility">
+                                <select type="text" class="form-control" name="valve_visibility" id="valve_visibility">
                                     <option value=""></option>
                                     <option value="Vislibile">Visible</option>
                                     <option value="Invisible">Invisible</option>
@@ -186,14 +197,15 @@
                                 <button type="button" class="btn btn-success btn block" id="btn_valve_insert"> 
                                     Insert Valve 
                                 </button>
-                            </div>                 
+                            </div>  
+                            
                             <div class="col-xs-12" style="height: 10px;"> </div>
+                            <div id="valve_status" class="col-xs-12 successMsg"> </div>
 
                         </div>
                     </div>
             </div>
             
-
             <!-- Pipeline Tab -->
             <div class="sidebar-pane" id="pipeline">
                 <h1 class="sidebar-header">Pipelines<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
@@ -236,9 +248,9 @@
                         <!-- pipeline_id -->
                         <div class="col-xs-12" style="height: 10px;"> </div>
                             <div id="new_pipeline_information" class="col-xs-12 new_feature">
-                            <label class="control-label col-sm-4" for="pipeline_id_new">Pipeline ID</label>
+                            <label class="control-label col-sm-4" for="new_pipeline_id">Pipeline ID</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" name="pipeline_id_new" id="pipeline_id_new">
+                                <input type="text" class="form-control" name="new_pipeline_id" id="pipeline_id_new">
                             </div>
                             
                         <!-- pipeline_category -->
@@ -282,7 +294,7 @@
                         <div class="col-xs-12" style="height: 10px;"> </div>
                         <label class="control-label col-sm-4" for="pipeline_location">Location</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" name="pipeline_location id="pipeline_location>
+                                <input type="text" class="form-control" name="pipeline_location" id="pipeline_location">
                             </div>
 
                         <!-- pipeline_geometry -->
@@ -307,10 +319,11 @@
                                     Insert Pipeline 
                                 </button>
                             </div>                 
-                            <div class="col-xs-12" style="height: 10px;"> </div>
                     </div>
                     </div>      
             </div>
+            <div class="col-xs-12" style="height: 10px;"> </div>
+            <div id="pipeline_status" class="col-xs-12 successMsg"> </div>
         </div>
 
              
@@ -375,7 +388,7 @@
                             <option value=""></option>
                             <option value="Open Plot">Open Plot</option>
                             <option value="Building">Building</option>
-                            <option value="Tin Shed">Tin Shed<option>
+                            <option value="Tin Shed">Tin Shed</option>
                             <option value="Under Construction">Under Construction</option>
                         </select>
                     </div>
@@ -430,6 +443,7 @@
             </div>
             </div>
         </div>
+        <div id="building_status" class="col-xs-12 successMsg"> </div>
 
     </div>
 
@@ -617,6 +631,38 @@
             });
         }
 
+        function refresh_valves() {
+            $.ajax({
+                url:'load_data.php',
+                data: {table:'valves'},
+                type: 'POST',
+                success: function(response) {
+                    if (response.trim().substr(0,5) =='ERROR'){
+                        //console.log(response);
+                    } else {
+                        //console.log(response);
+                        var jsnValve = JSON.parse(response); //unsa ning parse?
+                        //console.log(jsnValve);
+
+                        if (layerValves) {
+                            layerValves.remove();
+                            control_layers.removeLayer(layerValves);
+                        }
+
+                        layerValves = L.geoJSON(jsnValve, {pointToLayer: style_valves})
+                            .addTo(mymap);
+
+                        //Overlay Valves
+                         control_layers.addOverlay(layerValves, "Valves");
+                    }
+                    //console.log(response);
+                },
+                error: function(xhr, status, error) {
+                    console.log("ERROR: "+error);
+                }
+            });
+        }
+
         $("#valve_id").autocomplete({
               source: valves_array,
         }); 
@@ -726,12 +772,22 @@
                         request: 'valves',
                     },
                     type: 'POST',
-                    sucess:function(response) {
+                    success:function(response) {
                         if (response.trim().substr(0,5) =='ERROR'){
                             console.log(response);
                             $("#valve_status").html(response);
                         } else {
                             $("#valve_status").html("Valve Inserted Successfully!");
+                            refresh_valves();
+                            
+                            $("#valve_id_new").val("");
+                            $("#valve_type").val("");
+                            $("#valve_dma_id").val("");
+                            $("#valve_diameter").val("");
+                            $("#valve_visbility").val("");
+                            $("#valve_location").val("");
+                            $("#valve_geometry").val("");
+
                         }
                     },
                     error:function(xhr, status, error) {
@@ -742,6 +798,10 @@
             
             //console.log(valve_id);
         });
+
+        $('#btn_valve_refresh').click(function(){
+            refresh_valves();
+        })
 
         //PIPELINES
 
@@ -859,6 +919,69 @@
             $("#new_pipeline_information").hide();
         });
 
+        //irecheck pud ni ugma
+
+        $("#btn_pipeline_insert").click(function(){
+            var new_pipeline_id = $("#new_pipeline_id").val();
+            var pipeline_category = $("#pipeline_category").val();
+            var pipeline_dma_id = $("#pipeline_dma_id").val();
+            var pipeline_diameter = $("#pipeline_diameter").val();
+            var pipeline_method = $("#pipeline_method").val();
+            var pipeline_location = $("#pipeline_location").val();
+            var pipeline_geometry = $("#pipeline_geometry").val();
+            
+            if (new_pipeline_id == "" || pipeline_category == "" || pipeline_geometry == "") {
+                $("#pipeline_status").html("Please fill up all the fields");
+            } else {
+
+                console.log({
+                    pipeline_id: new_pipeline_id,
+                    pipeline_category: pipeline_category,
+                    pipeline_dma_id: pipeline_dma_id,
+                    pipeline_diameter: pipeline_diameter,
+                    pipeline_method: pipeline_method,
+                    pipeline_location: pipeline_location,
+                    pipeline_geometry: pipeline_geometry,
+                    request: 'pipelines',
+                });
+
+                $.ajax({
+                    url:'insert_data.php',
+                    data:{
+                        pipeline_id: new_pipeline_id,
+                        pipeline_category: pipeline_category,
+                        pipeline_dma_id: pipeline_dma_id,
+                        pipeline_diameter: pipeline_diameter,
+                        pipeline_method: pipeline_method,
+                        pipeline_location: pipeline_location,
+                        pipeline_geometry: pipeline_geometry,
+                        request: 'pipelines',
+                    },
+                    type: 'POST',
+                    success:function(response) {
+                        if (response.trim().substr(0,5) =='ERROR'){
+                            console.log(response);
+                            $("#pipeline_status").html(response);
+                        } else {
+                            $("#pipeline_status").html("Pipeline Inserted Successfully!");
+                            load_pipelines();
+                            
+                            $("#new_pipeline_id").val("");
+                            $("#pipeline_category").val("");
+                            $("#pipeline_dma_id").val("");
+                            $("#pipeline_diameter").val("");
+                            $("#pipeline_method").val("");
+                            $("#pipeline_location").val("");
+                            $("#pipeline_geometry").val("");
+
+                        }
+                    },
+                    error:function(xhr, status, error) {
+                        $("#pipeline_status").html(error);
+                    }
+                });
+            }
+        })
 
            
 
@@ -932,7 +1055,7 @@
                     break;
 
                 case 'Tin Shed':
-                    color = '7dcea0';
+                    color = '#7dcea0';
                     fill_color = '7dcea0';
                     fill_opacity = 0.8;
                     break;  
@@ -952,8 +1075,6 @@
 
          function process_buildings(json, lyr) {
             var att = json.properties;
-
-            buildings_array.push(att.account_no);
 
             buildings_array.push(att.account_no);
 
