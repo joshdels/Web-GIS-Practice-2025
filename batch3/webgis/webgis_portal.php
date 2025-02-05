@@ -237,11 +237,17 @@
 
                     <!-- adding lower part html user add details -->
                     <div id="newPipeline" class="col-xs-12">
-                        <div class = "col-xs-12">
+                        <div class = "col-xs-8">
                             <button type = "button" class="btn btn-info btn-block" id= "btn_pipeline_form">
                                 Insert New Pipeline
                             </button>
                         </div>
+                        <div class = "col-xs-4">
+                            <button type = "button" class="btn btn-success btn-block" id= "btn_pipeline_refresh">
+                                Refresh
+                            </button>
+                        </div>
+                    </div>
 
                         <div class="col-xs-12" style="height: 10px;"></div>
 
@@ -319,7 +325,7 @@
                                     Insert Pipeline 
                                 </button>
                             </div>                 
-                    </div>
+                    
                     </div>      
             </div>
             <div class="col-xs-12" style="height: 10px;"> </div>
@@ -360,12 +366,18 @@
                 </div>
 
                 <!-- adding lower part html user add details -->
-                <div id="newBuilding" class="col-xs-12"> </div>
+                <div id="newBuilding" class="col-xs-12"> 
 
-                <div class = "col-xs-12">
-                    <button type = "button" class="btn btn-info btn-block" id= "btn_building_form">
-                        Insert New Building
-                    </button>
+                    <div class = "col-xs-8">
+                        <button type = "button" class="btn btn-info btn-block" id= "btn_building_form">
+                            Insert New Building
+                        </button>
+                    </div>
+                    <div class = "col-xs-4">
+                        <button type = "button" class="btn btn-success btn-block" id= "btn_building_refresh">
+                            Refresh
+                        </button>
+                    </div>
 
                 </div>
 
@@ -374,17 +386,17 @@
                 <!--building_id -->
                     <div id="new_building_information" class="col-xs-12 new_feature">
                     
-                    <label class="control-label col-sm-4" for="building_id_new">Building ID </label>
+                    <label class="control-label col-sm-4" for="new_building_id">Building ID </label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" name="building_id_new" id="building_id_new">
+                        <input type="text" class="form-control" name="new_building_id" id="new_building_id">
                     </div>
 
                     <div class="col-xs-12" style="height: 20px;"> </div>
                     
                 <!-- building_category-->
-                    <label class="control-label col-sm-4" for="building_type">Building Type</label>
+                    <label class="control-label col-sm-4" for="building_category">Building Type</label>
                     <div class="col-sm-8">
-                        <select type="text" class="form-control" name="building_type" id="building">
+                        <select type="text" class="form-control" name="building_category" id="building_category">
                             <option value=""></option>
                             <option value="Open Plot">Open Plot</option>
                             <option value="Building">Building</option>
@@ -407,6 +419,14 @@
                 <label class="control-label col-sm-4" for="building_storey"> Storey </label>
                     <div class="col-sm-8">
                         <input type="text" class="form-control" name="building_storey" id="building_storey">
+                    </div>
+
+
+                <!-- building_population -->
+                <div class="col-xs-12" style="height: 10px;"> </div>
+                <label class="control-label col-sm-4" for="building_population"> Population </label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" name="building_population" id="building_population">
                     </div>
 
                 <!-- building_Location -->
@@ -442,9 +462,9 @@
                 
             </div>
             </div>
+            <div id="building_status" class="col-xs-12 successMsg"> </div>
         </div>
-        <div id="building_status" class="col-xs-12 successMsg"> </div>
-
+        
     </div>
 
     <div id="mapdiv" class="col-md-12"></div>
@@ -919,8 +939,6 @@
             $("#new_pipeline_information").hide();
         });
 
-        //irecheck pud ni ugma
-
         $("#btn_pipeline_insert").click(function(){
             var pipeline_id = $("#new_pipeline_id").val();
             var pipeline_category = $("#pipeline_category").val();
@@ -972,6 +990,9 @@
             }
         })
 
+        $("#btn_pipeline_refresh").click(function(){
+            load_pipelines();
+        });
            
 
         //BUILDINGS
@@ -1108,8 +1129,61 @@
             $("#new_building_information").hide();
         });
 
+        $("#btn_building_insert").click(function(){
+            var account_no = $("#new_building_id").val();
+            var building_category = $("#building_category").val();
+            var building_dma_id = $("#building_dma_id").val();
+            var building_storey = $("#building_storey").val();
+            var building_population = $("#building_population").val();
+            var building_location = $("#building_location").val();
+            var building_geometry = $("#building_geometry").val();
+            
+            if (account_no == "" || building_category == "" || building_geometry == "") {
+                $("#building_status").html("Please fill up all the fields");
+            } else {
 
-           
+                $.ajax({
+                    url:'insert_data.php',
+                    data:{
+                        account_no: account_no,
+                        building_category: building_category,
+                        building_dma_id: building_dma_id,
+                        building_storey: building_storey,
+                        building_population: building_population,
+                        building_location: building_location,
+                        building_geometry: building_geometry,
+                        request: 'buildings',
+                    },
+                    type: 'POST',
+                    success:function(response) {
+                        if (response.trim().substr(0,5) =='ERROR'){
+                            console.log(response);
+                            $("#building_status").html(response);
+                        } else {
+                            $("#building_status").html("Building Inserted Successfully!");
+                            load_buildings();
+                            
+                            $("#new_building_id").val("");
+                            $("#building_category").val("");
+                            $("#building_dma_id").val("");
+                            $("#building_storey").val("");
+                            $("#building_population").val("");
+                            $("#building_location").val("");
+                            $("#building_geometry").val("");
+
+                        }
+                    },
+                    error:function(xhr, status, error) {
+                        $("#building_status").html(error);
+                    }
+                });
+            }
+        })
+
+        $("#btn_building_refresh").click(function(){
+            load_buildings();
+        });
+
 
          //GENERAL FUNCTIONS
         function returnLayerByAttribute(table, field, value, callback) {

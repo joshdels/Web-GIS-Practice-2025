@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="styles.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.0/leaflet.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="source/jquery-ui.min.css">
+    <link rel="stylesheet" href="Plugins/sidebar/leaflet-sidebar.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="https://ppete2.github.io/Leaflet.PolylineMeasure/Leaflet.PolylineMeasure.css" />
+    <link rel="stylesheet" href="Plugins/mouse_position/L.Control.MousePosition.css">
+    <link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css" />
+    <link rel="stylesheet" href="Plugins/mini_map/Control.MiniMap.min.css">
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.0/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.0/leaflet-src.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"></script>
+    <script src="source/jquery-ui.min.js"></script>
+    <script src="Plugins/sidebar/leaflet-sidebar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
+    <script src="https://ppete2.github.io/Leaflet.PolylineMeasure/Leaflet.PolylineMeasure.js"></script>
+    <script src="Plugins/mouse_position/L.Control.MousePosition.js"></script>
+    <script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.js"></script>
+    <script src="Plugins/mini_map/Control.MiniMap.min.js"></script>
+    <script src="Plugins/ajax/leaflet.ajax.js"></script>
+
+</head>
+<body>
+
+    <div class="popup-container">
+
+        <input type="hidden" name="building_database_id" class="updateBuilding" values="something">
+        <input type="hidden" name="account_no" class="updateBuilding" values="something">
+
+        <div class="popup-form-group">
+            <label class="control-label popup-label">Account No.</label>
+            <input type="text" class="form-control popup-input text-center updateBuilding" value="something" name="account_no">
+        </div>
+        <div class="popup-form-group">
+            <label class="control-label popup-label">Category</label>
+            <input type="text" class="form-control popup-input text-center updateBuilding" value="something" name="building_category">
+        </div>
+        <div class="popup-form-group">
+            <label class="control-label popup-label">Storey</label>
+            <input type="number" class="form-control popup-input text-center updateBuilding" value="something" name="building_storey">
+        </div>
+        <div class="popup-form-group">
+            <label class="control-label popup-label">Population</label>
+            <input type="text" class="form-control popup-input text-center updateBuilding" value="something" name="building_population">
+        </div>
+        <div class="popup-form-group">
+            <label class="control-label popup-label">Location</label>
+            <input type="text" class="form-control popup-input text-center updateBuilding" value="something" name="building_location">
+        </div>
+        <div class="popup-form-group">
+            <label class="control-label popup-label">Account No.</label>
+            <input type="text" class="form-control popup-input text-center updateBuilding" value="something">
+        </div>
+        
+        <div class="popup-button-group">
+            <button type="submit" class="btn btn-success popup-button">Update</button>
+            <button type="submit" class="btn btn-danger popup-button">Delete</button>
+        </div>
+
+    </div>
+    
+</body>
+</html>
