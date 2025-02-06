@@ -1,12 +1,12 @@
-/* #mapdiv{
+#mapdiv{
     height: 100vh;
-} */
+}
 
 .popup-container {
     width: 80vw;
     max-width: 300px;
     height: 60vh;
-    max-height: 400px;
+    max-height: 350px;
     padding: 10px;
     box-sizing: border-box;
 }

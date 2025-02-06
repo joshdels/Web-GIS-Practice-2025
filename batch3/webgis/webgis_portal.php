@@ -488,7 +488,7 @@
          // initialize the map on the "map" div with a given center and zoom
          // control you map "mymap"
         var mymap = L.map("mapdiv", {
-            center: [7.44689, 125.8076],
+            center: [23.73, 90.44],
             zoom: 13,
             attributionControl: false,
             zoomControl: false,
@@ -497,15 +497,15 @@
         var openStreetMap = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?',{maxZoom:33}).addTo(mymap);
 
         var OpenStreetMap_HOT = L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
-            maxZoom: 23,
+            maxZoom: 21,
            });
 
         var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        maxZoom: 23,
+        maxZoom: 21,
         });
 
         var OpenTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-            maxZoom: 23,
+            maxZoom: 213,
         });
 
         var openStreetMap_minimap = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?',{
@@ -1089,8 +1089,66 @@
             buildings_array.push(att.account_no);
 
             //When Click details show up
-            lyr.bindPopup("Catergory: "+att.building_category+"<br>Storey: "+att.building_storey+"<br>Location :"+
-                att.building_location+"<br>Account Number: " + att.account_no+"<br>Building Population: "+att.building_population);
+            lyr.bindTooltip("Catergory: "+att.building_category+"<br>Storey: "+att.building_storey+"<br>Location :"+
+                att.building_location+"<br>Account Number: " + att.account_no+"<br>Building Population: "+att.building_population).bindPopup(
+                    
+                    `<div class="popup-container">
+
+                        <input type="hidden" name="building_database_id" class="updateBuilding" values='${att.building_database_id}'>
+                        <input type="hidden" name="account_no" class="updateBuilding" values='${att.account_no}'>
+
+                        <div class="popup-form-group">
+                            <label class="control-label popup-label">Account No.</label>
+                            <input type="text" class="form-control popup-input text-center updateBuilding" value='${att.account_no}' name="account_no_old">
+                        </div>
+                        <div class="popup-form-group">
+                            <label class="control-label popup-label">Category</label>
+                            <input type="text" class="form-control popup-input text-center updateBuilding" value='${att.building_category}' name="building_category">
+                        </div>
+                        <div class="popup-form-group">
+                            <label class="control-label popup-label">Storey</label>
+                            <input type="number" class="form-control popup-input text-center updateBuilding" value='${att.building_storey}' name="building_storey">
+                        </div>
+                        <div class="popup-form-group">
+                            <label class="control-label popup-label">Population</label>
+                            <input type="text" class="form-control popup-input text-center updateBuilding" value='${att.building_population}' name="building_population">
+                        </div>
+                        <div class="popup-form-group">
+                            <label class="control-label popup-label">Location</label>
+                            <input type="text" class="form-control popup-input text-center updateBuilding" value='${att.building_location}' name="building_location">
+                        </div>
+                        <div class="popup-form-group">
+                            <label class="control-label popup-label">Account No.</label>
+                            <input type="text" class="form-control popup-input text-center updateBuilding" value="something">
+                        </div>
+                        
+                        <div class="popup-button-group">
+                            <button type="submit" class="btn btn-success popup-button" onclick='updateBuilding()'>Update</button>
+                            <button type="submit" class="btn btn-danger popup-button" onclick='deleteBuilding()'>Delete</button>
+                        </div>
+
+                    </div> `
+
+                );
+         }
+
+         function updateBuilding(){
+            var jsn = returnFromData('updateBuilding');
+            console.log(jsn);
+            jsn.request = "buildings";
+
+            $.ajax({
+                url:'update_data.php',
+                data:jsn,
+                type: 'POST',
+                success: function(response){
+                    console.log(response);
+                    load_buildings();
+                },
+                error: function(error){
+                    console.log("ERROR " +error);
+                }
+            })
          }
 
          
@@ -1223,6 +1281,16 @@
                 }
             })
         } 
+
+        function returnFromData(inpClass) {
+            var objFormData = {};
+
+            $("."+inpClass).each(function(){
+                objFormData[this.name] = this.value;
+            })
+
+            return objFormData;
+        }
 
         
     
