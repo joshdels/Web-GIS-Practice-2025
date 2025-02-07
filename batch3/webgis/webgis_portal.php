@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="Plugins/mouse_position/L.Control.MousePosition.css">
     <link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css" />
     <link rel="stylesheet" href="Plugins/mini_map/Control.MiniMap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.15.10/dist/sweetalert2.min.css" rel="stylesheet">
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.0/leaflet.js"></script>
@@ -32,6 +33,7 @@
     <script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.js"></script>
     <script src="Plugins/mini_map/Control.MiniMap.min.js"></script>
     <script src="Plugins/ajax/leaflet.ajax.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.15.10/dist/sweetalert2.all.min.js"></script>
 
     <style>
         .bold {
@@ -1094,8 +1096,8 @@
                     
                     `<div class="popup-container">
 
-                        <input type="hidden" name="building_database_id" class="updateBuilding" values='${att.building_database_id}'>
-                        <input type="hidden" name="account_no" class="updateBuilding" values='${att.account_no}'>
+                        <input type="hidden" name="building_database_id" class="updateBuilding" value='${att.building_database_id}'>
+                        <input type="hidden" name="account_no" class="updateBuilding" value='${att.account_no}'>
 
                         <div class="popup-form-group">
                             <label class="control-label popup-label">Account No.</label>
@@ -1117,10 +1119,6 @@
                             <label class="control-label popup-label">Location</label>
                             <input type="text" class="form-control popup-input text-center updateBuilding" value='${att.building_location}' name="building_location">
                         </div>
-                        <div class="popup-form-group">
-                            <label class="control-label popup-label">Account No.</label>
-                            <input type="text" class="form-control popup-input text-center updateBuilding" value="something">
-                        </div>
                         
                         <div class="popup-button-group">
                             <button type="submit" class="btn btn-success popup-button" onclick='updateBuilding()'>Update</button>
@@ -1137,19 +1135,56 @@
             console.log(jsn);
             jsn.request = "buildings";
 
-            $.ajax({
-                url:'update_data.php',
-                data:jsn,
-                type: 'POST',
-                success: function(response){
-                    console.log(response);
-                    load_buildings();
-                },
-                error: function(error){
-                    console.log("ERROR " +error);
+            Swal.fire({
+                title: "Do you want to save the changes?",
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: "Save",
+                denyButtonText: `Don't save`
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    //update data ajax call
+                    $.ajax({
+                    url:'update_data.php',
+                    data:jsn,
+                    type: 'POST',
+                    success: function(response){
+                        Swal.fire("Saved!", "", "success");
+                        load_buildings();
+                    },
+                    error: function(error){
+                        console.log("ERROR " +error);
+                    }
+                });
+    
+                } else if (result.isDenied) {
+                    Swal.fire("Changes are not saved", "", "info");
                 }
-            })
+            });
+
+            
          }
+
+
+        //  function deleteBuilding() {
+        //     var jsn = returnFromData('updateBuilding');
+        //     console.log(jsn);
+        //     jsn.request = "buildings";
+
+        //     $.ajax({
+        //         url:'update_data.php',
+        //         data:jsn,
+        //         type: 'POST',
+        //         success: function(response){
+        //             console.log(response);
+        //             load_buildings();
+        //         },
+        //         error: function(error){
+        //             console.log("ERROR " +error);
+        //         }
+        //     })
+        //  }
+    
 
          
 
