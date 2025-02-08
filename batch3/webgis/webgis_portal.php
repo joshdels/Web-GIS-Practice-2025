@@ -166,7 +166,7 @@
                             <div class="col-sm-8">
                                 <select type="text" class="form-control" name="valve_visibility" id="valve_visibility">
                                     <option value=""></option>
-                                    <option value="Vislibile">Visible</option>
+                                    <option value="Visible">Visible</option>
                                     <option value="Invisible">Invisible</option>
                                 </select>
                             </div>
@@ -901,8 +901,117 @@
 
             //Hover to show deails
             lyr.bindTooltip("Pipe ID: "+att.pipe_id+"<br>Diameter: "+att.pipeline_diameter+"<br>Location: "+
-                att.pipeline_location+"<br>Category: "+att.pipeline_category+"<br>Length: "+att.pipeline_length);
-        }
+                att.pipeline_location+"<br>Category: "+att.pipeline_category+"<br>Length: "+att.pipeline_length).bindPopup(
+
+                `<div class="popup-container">
+
+                    <input type="hidden" name="pipeline_database_id" class="updatePipeline" value='${att.pipeline_database_id}'>
+                    <input type="hidden" name="pipeline_id_old" class="updatePipeline" value='${att.pipe_id}'>
+
+                    <div class="popup-form-group">
+                        <label class="control-label popup-label">Pipe ID</label>
+                        <input type="text" class="form-control popup-input text-center updatePipeline" value='${att.pipe_id}' name="pipeline_id">
+                    </div>
+                    <div class="popup-form-group">
+                        <label class="control-label popup-label">DMA ID</label>
+                        <input type="text" class="form-control popup-input text-center updatePipeline" value='${att.pipeline_dma_id}' name="pipeline_dma_id">
+                    </div>
+                    <div class="popup-form-group">
+                        <label class="control-label popup-label">Diameter (mm)</label>
+                        <input type="number" class="form-control popup-input text-center updatePipeline" value='${att.pipeline_diameter}' name="pipeline_diameter">
+                    </div>
+                    <div class="popup-form-group">
+                        <label class="control-label popup-label">Location</label>
+                        <input type="text" class="form-control popup-input text-center updatePipeline" value='${att.pipeline_location}' name="pipeline_location">
+                    </div>
+                    <div class="popup-form-group">
+                        <label class="control-label popup-label">Category</label>
+                        <input type="text" class="form-control popup-input text-center updatePipeline" value='${att.pipeline_category}' name="pipeline_category">
+                    </div>
+                    <div class="popup-form-group">
+                        <label class="control-label popup-label">Length (m) </label>
+                        <input type="number" class="form-control popup-input text-center updatePipeline" value='${att.pipeline_length}' name="pipeline_length">
+                    </div>
+                    
+                    <div class="popup-button-group">
+                        <button type="submit" class="btn btn-success popup-button" onclick = 'updatePipeline()'>Update</button>
+                        <button type="submit" class="btn btn-danger popup-button" onclick = 'deletePipeline()'>Delete</button>
+                    </div>
+
+                </div>`
+
+                );
+            }
+
+            function updatePipeline(){
+                var jsn = returnFromData('updatePipeline');
+                console.log(jsn);
+                jsn.request = "pipelines";
+
+                Swal.fire({
+                    title: "Do you want to save the changes?",
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: "Save",
+                    denyButtonText: `Don't save`
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        //update data ajax call
+                        $.ajax({
+                        url:'update_data.php',
+                        data:jsn,
+                        type: 'POST',
+                        success: function(response){
+                            Swal.fire("Saved!", "", "success");
+                            load_pipelines();
+                        },
+                        error: function(error){
+                            console.log("ERROR " +error);
+                        }
+                    });
+        
+                    } else if (result.isDenied) {
+                        Swal.fire("Changes are not saved", "", "info");
+                    }
+                });
+                
+            }
+
+            function deletePipeline(){
+                var jsn = returnFromData('updatePipeline');
+                console.log(jsn);
+                jsn.request = "pipelines";
+
+                Swal.fire({
+                    title: "Do you want to delete this pipeline?",
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: "Delete",
+                    denyButtonText: `Don't Delete`
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        //update data ajax call
+                        $.ajax({
+                        url:'delete_data.php',
+                        data:jsn,
+                        type: 'POST',
+                        success: function(response){
+                            Swal.fire("Delete!", "", "success");
+                            load_pipelines();
+                        },
+                        error: function(error){
+                            console.log("ERROR " +error);
+                        }
+                    });
+
+                    } else if (result.isDenied) {
+                        Swal.fire("Changes are not delete", "", "info");
+                    }
+                });
+            }
+
+            
+         
 
         $("#findPipeline").click(function(){
             var pipeline_id = $("#pipeline_id").val();
@@ -1104,6 +1213,10 @@
                             <input type="text" class="form-control popup-input text-center updateBuilding" value='${att.account_no}' name="account_no_old">
                         </div>
                         <div class="popup-form-group">
+                            <label class="control-label popup-label">DMA ID</label>
+                            <input type="text" class="form-control popup-input text-center updateBuilding" value='${att.building_dma_id}' name="building_dma_id">
+                        </div>
+                        <div class="popup-form-group">
                             <label class="control-label popup-label">Category</label>
                             <input type="text" class="form-control popup-input text-center updateBuilding" value='${att.building_category}' name="building_category">
                         </div>
@@ -1161,32 +1274,44 @@
                     Swal.fire("Changes are not saved", "", "info");
                 }
             });
-
             
          }
 
+        function deleteBuilding(){
+            var jsn = returnFromData('updateBuilding');
+            console.log(jsn);
+            jsn.request = "buildings";
 
-        //  function deleteBuilding() {
-        //     var jsn = returnFromData('updateBuilding');
-        //     console.log(jsn);
-        //     jsn.request = "buildings";
+            Swal.fire({
+                title: "Do you want to delete this building?",
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: "Delete",
+                denyButtonText: `Don't Delete`
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    //update data ajax call
+                    $.ajax({
+                    url:'delete_data.php',
+                    data:jsn,
+                    type: 'POST',
+                    success: function(response){
+                        Swal.fire("Delete!", "", "success");
+                        load_buildings();
+                    },
+                    error: function(error){
+                        console.log("ERROR " +error);
+                    }
+                });
 
-        //     $.ajax({
-        //         url:'update_data.php',
-        //         data:jsn,
-        //         type: 'POST',
-        //         success: function(response){
-        //             console.log(response);
-        //             load_buildings();
-        //         },
-        //         error: function(error){
-        //             console.log("ERROR " +error);
-        //         }
-        //     })
-        //  }
+                } else if (result.isDenied) {
+                    Swal.fire("Changes are not delete", "", "info");
+                }
+            });
+        
+        }
+
     
-
-         
 
          $("#findBuilding").click(function(){
             var account_no = $("#building_id").val();
@@ -1332,8 +1457,6 @@
 
         
     </script>
+
 </body>
 </html>
-
-
-
