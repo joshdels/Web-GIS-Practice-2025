@@ -36,32 +36,28 @@
 
     <div class="popup-container">
 
-        <input type="hidden" name="pipeline_database_id" class="updatePipeline" values="something">
-        <input type="hidden" name="pipeline_id_old" class="updatePipeline" values="something">
+        <input type="hidden" name="valve_database_id" class="updateValves" value='${att.valve_database_id}'>
+        <input type="hidden" name="valve_id_old" class="updateValves" value='${att.valve_id}'>
 
         <div class="popup-form-group">
-            <label class="control-label popup-label">Pipe ID</label>
-            <input type="text" class="form-control popup-input text-center updatePipeline" value="something" name="pipeline_id">
+            <label class="control-label popup-label">Valve ID</label>
+            <input type="text" class="form-control popup-input text-center updateValves" value='${att.valve_id}' name="valve_id">
         </div>
         <div class="popup-form-group">
-            <label class="control-label popup-label">DMA ID</label>
-            <input type="text" class="form-control popup-input text-center updatePipeline" value="something" name="pipeline_dma_id">
+            <label class="control-label popup-label">Valve Type</label>
+            <input type="text" class="form-control popup-input text-center updateValves" value='${att.valve_type}' name="valve_type">
         </div>
         <div class="popup-form-group">
             <label class="control-label popup-label">Diameter (mm)</label>
-            <input type="number" class="form-control popup-input text-center updatePipeline" value="something" name="pipeline_diameter">
+            <input type="number" class="form-control popup-input text-center updateValves" value='${att.valve_diameter}' name="valve_diameter">
         </div>
         <div class="popup-form-group">
-            <label class="control-label popup-label">Location</label>
-            <input type="text" class="form-control popup-input text-center updatePipeline" value="something" name="pipeline_location">
+            <label class="control-label popup-label">DMA ID</label>
+            <input type="text" class="form-control popup-input text-center updateValves" value='${att.valve_dma_id}' name="valve_dma_id">
         </div>
         <div class="popup-form-group">
-            <label class="control-label popup-label">Category</label>
-            <input type="text" class="form-control popup-input text-center updatePipeline" value="something" name="pipeline_category">
-        </div>
-        <div class="popup-form-group">
-            <label class="control-label popup-label">Length (m) </label>
-            <input type="text" class="form-control popup-input text-center updatePipeline" value="something" name="pipeline_length">
+            <label class="control-label popup-label">Visibilitys</label>
+            <input type="text" class="form-control popup-input text-center updateValves" value='${att.valve_visibility}' name="valve_visibility">
         </div>
         
         <div class="popup-button-group">

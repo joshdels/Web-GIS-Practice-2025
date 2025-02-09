@@ -107,4 +107,55 @@
             }
     }
 
+
+    if ($request == 'valves') {
+        $valve_database_id = htmlspecialchars($_POST['valve_database_id'], ENT_QUOTES);
+
+        $valve_id_old = htmlspecialchars($_POST['valve_id_old'], ENT_QUOTES);
+        $valve_id = htmlspecialchars($_POST['valve_id'], ENT_QUOTES);
+        $valve_dma_id = htmlspecialchars($_POST['valve_dma_id'], ENT_QUOTES);
+        $valve_diameter = htmlspecialchars($_POST['valve_diameter'], ENT_QUOTES);
+        $valve_type = htmlspecialchars($_POST['valve_type'], ENT_QUOTES);
+        $valve_visibility = htmlspecialchars($_POST['valve_visibility'], ENT_QUOTES);
+
+        try {
+
+            if ($valve_id_old != $valve_id) {
+
+                $result = $pdo ->query("SELECT *FROM valves WHERE valve_id = '$valve_id' ");
+
+                if ($result -> rowCount()>0) {
+                    echo "ERROR: Valve ID already exists for another valve. Please choose a new valve id!"; 
+                
+                } else {
+                    $pdo -> query("UPDATE valves SET 
+                    valve_id = '$valve_id',  
+                    valve_dma_id = '$valve_dma_id',
+                    valve_diameter = '$valve_diameter',
+                    valve_type = '$valve_type',
+                    valve_visibility = '$valve_visibility'
+
+                WHERE valve_database_id = '$valve_database_id'
+                ");
+                
+                }
+
+                }  else {
+
+                        $pdo -> query("UPDATE valves SET 
+                        valve_id = '$valve_id',  
+                        valve_dma_id = '$valve_dma_id',
+                        valve_diameter = '$valve_diameter',
+                        valve_type = '$valve_type',
+                        valve_visibility = '$valve_visibility'
+
+                    WHERE valve_database_id = '$valve_database_id'
+                    ");
+            
+                }    
+            } catch(PDOException $e) {
+                echo "Error: ".$e->getMessage();
+            }
+    }
+
     ?>

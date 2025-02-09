@@ -78,8 +78,38 @@
         <div class="sidebar-content">
             <!-- Home Tab -->
             <div class="sidebar-pane" id="home">
-                <h1 class="sidebar-header">Home<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                <h1 class="sidebar-header">
+                    Home
+                    <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
                 </h1>
+
+                <div id="divHome" class="col-xs-12">
+                    <div class="col-xs-12" style="height: 10px;"></div>
+                
+                    <div class="col-xs-12">
+                        <p class="text-center bold">Filter and Area </p>
+                    </div>
+
+                    <div class="col-xs-12 errorMsg" id="home_error"></div>
+
+                    <div class="col-xs-12" style="height: 10px;"></div>
+
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <input type="text" id="dma_id" class="form-control" 
+                            placeholder="DMA ID">
+                        </div>
+                        <div class="col-xs-6">
+                            <button id="filter_dma" class="btn btn-primary btn-block">
+                            Fiter Area</button>
+                        </div>
+                    </div>
+                    <div class="col-xs-12" id="home_information"> 
+                    </div>
+                </div>
+                <div class="col-xs-12" style="height: 15px;"></div>
+                    <div class="col-xs-12" id="valve_information"></div>
+                    <div class="col-xs-12" style="height: 60px;"> </div>
             </div>
 
             <!-- Valve Tab -->
@@ -485,6 +515,8 @@
         var valves_array = [];
         var pipelines_array = [];
         var buildings_array = [];
+
+        var dma_id;
         
 
          // initialize the map on the "map" div with a given center and zoom
@@ -611,18 +643,28 @@
         //DATA LOADING OPERATIONS
 
         //HOME
-        load_valves();
-        load_pipelines();
-        load_buildings();
+        $('#filter_dma').click(function(){
+            var dma_id = $("#dma_id").val();
+            
+            if (!dma_id) {
+                $("#home_error").html("Please provide a DMA ID first");
+            } else {
+                // adding parameters dma_id as my filter to load valves
+                load_valves(dma_id);
+                load_pipelines(dma_id);
+                load_buildings(dma_id);
+            }
+        })
+     
     
         
         //VALVE
 
         //connect to database to load data _updated napod ni sya ug data na live ginafeed sa table
-        function load_valves() {
+        function load_valves(dma_id) {
             $.ajax({
                 url:'load_data.php',
-                data: {table:'valves'},
+                data: {table:'valves', dma_id:dma_id},
                 type: 'POST',
                 success: function(response) {
                     if (response.trim().substr(0,5) =='ERROR'){
@@ -653,10 +695,10 @@
             });
         }
 
-        function refresh_valves() {
+        function refresh_valves(dma_id) {
             $.ajax({
                 url:'load_data.php',
-                data: {table:'valves'},
+                data: {table:'valves', dma_id:dma_id},
                 type: 'POST',
                 success: function(response) {
                     if (response.trim().substr(0,5) =='ERROR'){
@@ -723,11 +765,114 @@
 
             //hover over objects
             return L.circleMarker(latlng, style).bindTooltip("Valve ID: " + att.valve_id+"<br>Valve Type: "+att.valve_type+"<br>Diameter (mm): "+
-                att.valve_diameter+"<br>Location: "+att.valve_location+"<br>Valve DMA ID: "+att.valve_dma_id+"<br>Valve Visibility: "+att.valve_visibility);
-          
-        }
+                att.valve_diameter+"<br>Location: "+att.valve_location+"<br>Valve DMA ID: "+att.valve_dma_id+"<br>Valve Visibility: "+att.valve_visibility).bindPopup(
+                
+                `<div class="popup-container">
 
-       
+                    <input type="hidden" name="valve_database_id" class="updateValve" value='${att.valve_database_id}'>
+                    <input type="hidden" name="valve_id_old" class="updateValve" value='${att.valve_id}'>
+
+                    <div class="popup-form-group">
+                        <label class="control-label popup-label">Valve ID</label>
+                        <input type="text" class="form-control popup-input text-center updateValve" value='${att.valve_id}' name="valve_id">
+                    </div>
+                    <div class="popup-form-group">
+                        <label class="control-label popup-label">Valve Type</label>
+                        <input type="text" class="form-control popup-input text-center updateValve" value='${att.valve_type}' name="valve_type">
+                    </div>
+                    <div class="popup-form-group">
+                        <label class="control-label popup-label">Diameter (mm)</label>
+                        <input type="number" class="form-control popup-input text-center updateValve" value='${att.valve_diameter}' name="valve_diameter">
+                    </div>
+                    <div class="popup-form-group">
+                        <label class="control-label popup-label">DMA ID</label>
+                        <input type="text" class="form-control popup-input text-center updateValve" value='${att.valve_dma_id}' name="valve_dma_id">
+                    </div>
+                    <div class="popup-form-group">
+                        <label class="control-label popup-label">Visibilitys</label>
+                        <input type="text" class="form-control popup-input text-center updateValve" value='${att.valve_visibility}' name="valve_visibility">
+                    </div>
+
+                    <div class="popup-button-group">
+                        <button type="submit" class="btn btn-success popup-button" onclick = 'updateValve()'>Update</button>
+                        <button type="submit" class="btn btn-danger popup-button" onclick = 'deleteValve()'>Delete</button>
+                    </div>
+
+                </div>`
+    
+            );
+            }
+            
+
+            function updateValve(){
+                var jsn = returnFromData('updateValve');
+                console.log(jsn);
+                jsn.request = "valves";
+
+                Swal.fire({
+                    title: "Do you want to save the changes?",
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: "Save",
+                    denyButtonText: `Don't save`
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        //update data ajax call
+                        $.ajax({
+                        url:'update_data.php',
+                        data:jsn,
+                        type: 'POST',
+                        success: function(response){
+                            Swal.fire("Saved!", "", "success");
+                            refresh_valves(dma_id);
+                        },
+                        error: function(error){
+                            console.log("ERROR " +error);
+                        }
+                    });
+        
+                    } else if (result.isDenied) {
+                        Swal.fire("Changes are not saved", "", "info");
+                    }
+                });
+                
+            }
+
+            function deleteValve(){
+                var jsn = returnFromData('updateValve');
+                console.log(jsn);
+                jsn.request = "valves";
+
+                Swal.fire({
+                    title: "Do you want to delete this valve?",
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: "Delete",
+                    denyButtonText: `Don't Delete`
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        //update data ajax call
+                        $.ajax({
+                        url:'delete_data.php',
+                        data:jsn,
+                        type: 'POST',
+                        success: function(response){
+                            Swal.fire("Delete!", "", "success");
+                            refresh_valves(dma_id);
+                        },
+                        error: function(error){
+                            console.log("ERROR " +error);
+                        }
+                    });
+
+                    } else if (result.isDenied) {
+                        Swal.fire("Changes are not delete", "", "info");
+                    }
+                });
+            }
+
+        
+
         $('#findValve').click(function() {
             var valve_id = $("#valve_id").val();
             
@@ -800,7 +945,7 @@
                             $("#valve_status").html(response);
                         } else {
                             $("#valve_status").html("Valve Inserted Successfully!");
-                            refresh_valves();
+                            refresh_valves(dma_id);
                             
                             $("#valve_id_new").val("");
                             $("#valve_type").val("");
@@ -822,7 +967,7 @@
         });
 
         $('#btn_valve_refresh').click(function(){
-            refresh_valves();
+            refresh_valves(dma_id);
         })
 
         //PIPELINES
@@ -831,10 +976,10 @@
             source: pipelines_array,
         });
 
-        function  load_pipelines() {
+        function  load_pipelines(dma_id){
             $.ajax({
                 url:'load_data.php',
-                data: {table:'pipelines'},
+                data: {table:'pipelines', dma_id:dma_id},
                 type: 'POST',
                 success: function(response) {
                     if (response.trim().substr(0,5) =='ERROR'){
@@ -963,7 +1108,7 @@
                         type: 'POST',
                         success: function(response){
                             Swal.fire("Saved!", "", "success");
-                            load_pipelines();
+                            load_pipelines(dma_id)(dma_id);
                         },
                         error: function(error){
                             console.log("ERROR " +error);
@@ -997,7 +1142,7 @@
                         type: 'POST',
                         success: function(response){
                             Swal.fire("Delete!", "", "success");
-                            load_pipelines();
+                            load_pipelines(dma_id)(dma_id)();
                         },
                         error: function(error){
                             console.log("ERROR " +error);
@@ -1082,7 +1227,7 @@
                             $("#pipeline_status").html(response);
                         } else {
                             $("#pipeline_status").html("Pipeline Inserted Successfully!");
-                            load_pipelines();
+                            load_pipelines(dma_id)(dma_id)();
                             
                             $("#new_pipeline_id").val("");
                             $("#pipeline_category").val("");
@@ -1102,16 +1247,16 @@
         })
 
         $("#btn_pipeline_refresh").click(function(){
-            load_pipelines();
+            load_pipelines(dma_id)();
         });
            
 
         //BUILDINGS
         
-        function load_buildings() {
+        function load_buildings(dma_id) {
             $.ajax({
                 url:'load_data.php',
-                data: {table:'buildings'},
+                data: {table:'buildings', dma_id:dma_id},
                 type: 'POST',
                 success: function(response) {
                     if (response.trim().substr(0,5) =='ERROR'){
@@ -1183,6 +1328,10 @@
                 case 'Open Plot':
                     color = '#f9e79f';
                     fill_color = '#f9e79f';
+                    break;
+                case 'Under Construction':
+                    color = '#f5cba7';
+                    fill_color = '#f5cba7';
                     break;
                 default:
                     color = 'black';
@@ -1263,7 +1412,7 @@
                     type: 'POST',
                     success: function(response){
                         Swal.fire("Saved!", "", "success");
-                        load_buildings();
+                        load_buildings(dma_id);
                     },
                     error: function(error){
                         console.log("ERROR " +error);
@@ -1297,7 +1446,7 @@
                     type: 'POST',
                     success: function(response){
                         Swal.fire("Delete!", "", "success");
-                        load_buildings();
+                        load_buildings(dma_id)(dma_id);
                     },
                     error: function(error){
                         console.log("ERROR " +error);
@@ -1379,7 +1528,7 @@
                             $("#building_status").html(response);
                         } else {
                             $("#building_status").html("Building Inserted Successfully!");
-                            load_buildings();
+                            load_buildings(dma_id)(dma_id);
                             
                             $("#new_building_id").val("");
                             $("#building_category").val("");
@@ -1399,7 +1548,7 @@
         })
 
         $("#btn_building_refresh").click(function(){
-            load_buildings();
+            load_buildings(dma_id)(dma_id);
         });
 
 
