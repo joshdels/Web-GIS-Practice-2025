@@ -101,7 +101,7 @@
                         </div>
                         <div class="col-xs-6">
                             <button id="filter_dma" class="btn btn-primary btn-block">
-                            Fiter Area</button>
+                            Filter Area</button>
                         </div>
                     </div>
                     <div class="col-xs-12" id="home_information"> 
@@ -570,7 +570,9 @@
             "Open TopoMap": OpenTopoMap,
             "Esri World Imagery": Esri_WorldImagery,
         };
-
+        
+        var overlays = {}; // Initialize overlays variable
+        
         var control_layers = L.control.layers(baseLayers, overlays).addTo(mymap);
 
         //MEASURE
@@ -644,7 +646,8 @@
 
         //HOME
         $('#filter_dma').click(function(){
-            var dma_id = $("#dma_id").val();
+            dma_id = $("#dma_id").val();
+            console.log(dma_id);
             
             if (!dma_id) {
                 $("#home_error").html("Please provide a DMA ID first");
@@ -698,7 +701,7 @@
         function refresh_valves(dma_id) {
             $.ajax({
                 url:'load_data.php',
-                data: {table:'valves', dma_id:dma_id},
+                data: {table:'valves'},
                 type: 'POST',
                 success: function(response) {
                     if (response.trim().substr(0,5) =='ERROR'){
@@ -789,6 +792,10 @@
                         <input type="text" class="form-control popup-input text-center updateValve" value='${att.valve_dma_id}' name="valve_dma_id">
                     </div>
                     <div class="popup-form-group">
+                        <label class="control-label popup-label">Location</label>
+                        <input type="text" class="form-control popup-input text-center updateValve" value='${att.valve_location}' name="valve_location">
+                    </div>
+                    <div class="popup-form-group">
                         <label class="control-label popup-label">Visibilitys</label>
                         <input type="text" class="form-control popup-input text-center updateValve" value='${att.valve_visibility}' name="valve_visibility">
                     </div>
@@ -820,7 +827,7 @@
                         //update data ajax call
                         $.ajax({
                         url:'update_data.php',
-                        data:jsn,
+                        data: jsn,
                         type: 'POST',
                         success: function(response){
                             Swal.fire("Saved!", "", "success");
@@ -1108,7 +1115,7 @@
                         type: 'POST',
                         success: function(response){
                             Swal.fire("Saved!", "", "success");
-                            load_pipelines(dma_id)(dma_id);
+                            load_pipelines(dma_id);
                         },
                         error: function(error){
                             console.log("ERROR " +error);
@@ -1142,7 +1149,7 @@
                         type: 'POST',
                         success: function(response){
                             Swal.fire("Delete!", "", "success");
-                            load_pipelines(dma_id)(dma_id)();
+                            load_pipelines(dma_id);
                         },
                         error: function(error){
                             console.log("ERROR " +error);
@@ -1227,7 +1234,7 @@
                             $("#pipeline_status").html(response);
                         } else {
                             $("#pipeline_status").html("Pipeline Inserted Successfully!");
-                            load_pipelines(dma_id)(dma_id)();
+                            load_pipelines(dma_id)();
                             
                             $("#new_pipeline_id").val("");
                             $("#pipeline_category").val("");
@@ -1247,7 +1254,7 @@
         })
 
         $("#btn_pipeline_refresh").click(function(){
-            load_pipelines(dma_id)();
+            load_pipelines(dma_id);
         });
            
 
@@ -1446,7 +1453,7 @@
                     type: 'POST',
                     success: function(response){
                         Swal.fire("Delete!", "", "success");
-                        load_buildings(dma_id)(dma_id);
+                        load_buildings(dma_id);
                     },
                     error: function(error){
                         console.log("ERROR " +error);
@@ -1528,7 +1535,7 @@
                             $("#building_status").html(response);
                         } else {
                             $("#building_status").html("Building Inserted Successfully!");
-                            load_buildings(dma_id)(dma_id);
+                            load_buildings(dma_id);
                             
                             $("#new_building_id").val("");
                             $("#building_category").val("");
@@ -1548,7 +1555,7 @@
         })
 
         $("#btn_building_refresh").click(function(){
-            load_buildings(dma_id)(dma_id);
+            load_buildings(dma_id);
         });
 
 

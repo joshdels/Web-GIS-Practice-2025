@@ -32,8 +32,8 @@
                     building_location = '$building_location',
                     building_dma_id = '$building_dma_id'
 
-                WHERE building_database_id = '$building_database_id'
-                ");
+                    WHERE building_database_id = '$building_database_id'
+                    ");
                 
                 }
             }  else {
@@ -116,6 +116,7 @@
         $valve_dma_id = htmlspecialchars($_POST['valve_dma_id'], ENT_QUOTES);
         $valve_diameter = htmlspecialchars($_POST['valve_diameter'], ENT_QUOTES);
         $valve_type = htmlspecialchars($_POST['valve_type'], ENT_QUOTES);
+        $valve_location = htmlspecialchars($_POST['valve_location'], ENT_QUOTES);
         $valve_visibility = htmlspecialchars($_POST['valve_visibility'], ENT_QUOTES);
 
         try {
@@ -133,6 +134,7 @@
                     valve_dma_id = '$valve_dma_id',
                     valve_diameter = '$valve_diameter',
                     valve_type = '$valve_type',
+                    valve_location = '$valve_location',
                     valve_visibility = '$valve_visibility'
 
                 WHERE valve_database_id = '$valve_database_id'
@@ -147,6 +149,7 @@
                         valve_dma_id = '$valve_dma_id',
                         valve_diameter = '$valve_diameter',
                         valve_type = '$valve_type',
+                        valve_location = '$valve_location',
                         valve_visibility = '$valve_visibility'
 
                     WHERE valve_database_id = '$valve_database_id'
