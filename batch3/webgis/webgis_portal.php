@@ -1328,17 +1328,17 @@
                     break;
 
                 case 'Tin Shed':
-                    color = '#7dcea0';
-                    fill_color = '#7dcea0';
+                    color = '#28b463';
+                    fill_color = '#28b463';
                     fill_opacity = 0.8;
                     break;  
                 case 'Open Plot':
-                    color = '#f9e79f';
-                    fill_color = '#f9e79f';
+                    color = '#f4d03f';
+                    fill_color = '#f4d03f';
                     break;
                 case 'Under Construction':
-                    color = '#f5cba7';
-                    fill_color = '#f5cba7';
+                    color = '#9b59b6';
+                    fill_color = '#9b59b6';
                     break;
                 default:
                     color = 'black';
