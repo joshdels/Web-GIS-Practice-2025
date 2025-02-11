@@ -1,2 +1,4 @@
 .env
 init.php 
+batch3\webgis\raster_data
+batch3/webgis/raster_data/**/*.png

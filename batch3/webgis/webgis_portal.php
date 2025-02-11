@@ -511,6 +511,7 @@
         var layerValves;
         var layerPipelines;
         var layerBuildings;
+        var raster_data;
 
         var valves_array = [];
         var pipelines_array = [];
@@ -656,6 +657,7 @@
                 load_valves(dma_id);
                 load_pipelines(dma_id);
                 load_buildings(dma_id);
+                load_rasterdata(dma_id);
             }
         })
      
@@ -1557,56 +1559,71 @@
         $("#btn_building_refresh").click(function(){
             load_buildings(dma_id);
         });
+        
+        //RASTER DATA
+
+        function load_rasterdata() {
+            var path = 'http://localhost/Web-GIS-Practice/batch3/webgis/raster_data/' + dma_id +'/{z}/{x}/{y}.png';
+
+            if (raster_data) {
+                raster_data.remove();
+                control_layers.removeLayer(raster_data);
+            }
+            raster_data = L.tileLayer(path, {tms:1, opacity:1, attribution:"", maxZoom:22});
+
+            control_layers.addOverlay(raster_data, "Drone Image");
+
+        };
 
 
          //GENERAL FUNCTIONS
-        function returnLayerByAttribute(table, field, value, callback) {
-            $.ajax({
-                url:'find_data.php',
-                data: {table:table, field:field, value:value},
-                type:'POST',
-                success: function(response) {
-                    if (response.trim().substr(0,5) =='ERROR'){
-                        console.log(response);
-                    } else {
-
-                        //debugging and uderstanding the code
-                            //more general view raw data comming from the database
-                                var jsn = JSON.parse(response);
-                                // console.log(jsn);
-                            
-                            //moving the raw data into Leaflet format
-                                var layer = L.geoJSON(jsn);
-                                // console.log(layer);
-
-                            //more specific to under layer
-                                var layer = layer.getLayers();
-                                // console.log(layer)
-
-                        if (layer.length>0) {
-                            callback(layer[0]);
-                            
+            function returnLayerByAttribute(table, field, value, callback) {
+                $.ajax({
+                    url:'find_data.php',
+                    data: {table:table, field:field, value:value},
+                    type:'POST',
+                    success: function(response) {
+                        if (response.trim().substr(0,5) =='ERROR'){
+                            console.log(response);
                         } else {
-                            callback(false);
+
+                            //debugging and uderstanding the code
+                                //more general view raw data comming from the database
+                                    var jsn = JSON.parse(response);
+                                    // console.log(jsn);
+                                
+                                //moving the raw data into Leaflet format
+                                    var layer = L.geoJSON(jsn);
+                                    // console.log(layer);
+
+                                //more specific to under layer
+                                    var layer = layer.getLayers();
+                                    // console.log(layer)
+
+                            if (layer.length>0) {
+                                callback(layer[0]);
+                                
+                            } else {
+                                callback(false);
+                            }
                         }
+                    
+                    },
+                    error: function(xhr, status, error) {
+                        console.log("ERROR: "+error);
                     }
-                   
-                },
-                error: function(xhr, status, error) {
-                    console.log("ERROR: "+error);
-                }
-            })
-        } 
+                })
+            } 
 
-        function returnFromData(inpClass) {
-            var objFormData = {};
+            function returnFromData(inpClass) {
+                var objFormData = {};
 
-            $("."+inpClass).each(function(){
-                objFormData[this.name] = this.value;
-            })
+                $("."+inpClass).each(function(){
+                    objFormData[this.name] = this.value;
+                })
 
-            return objFormData;
-        }
+                return objFormData;
+            }
 
         
     
